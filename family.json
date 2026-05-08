@@ -2,6 +2,13 @@
   "name": "Edgar Yael Miranda Islas",
   "years": "2001–Vivo",
   "gender": "Hombre",
+  "siblings": [
+    {
+      "name": "Daniel Yeray Miranda Islas",
+      "years": "2006–Vivo",
+      "gender": "Hombre"
+    }
+  ],
   "children": [
     {
       "name": "Juan Pablo Miranda Guillermo",
@@ -12,6 +19,25 @@
         "years": "1973–Viva",
         "gender": "Mujer"
       },
+      "siblings": [
+        {
+          "name": "Ernesto Rafael Miranda Guillermo",
+          "years": "1974–Vivo",
+          "gender": "Hombre",
+          "spouse": {
+            "name": "Anne Ortengren",
+            "years": "1974–Viva",
+            "gender": "Mujer"
+          },
+          "descendants": [
+            {
+              "name": "Elena Miranda Ortengren",
+              "years": "2016–Viva",
+              "gender": "Mujer"
+            }
+          ]
+        }
+      ],
       "children": [
         {
           "name": "Antonio Miranda Valverde",
@@ -74,6 +100,53 @@
                 "years": "1900–Fallecida",
                 "gender": "Mujer"
               },
+              "siblings": [
+                {
+                  "name": "Teodoro Peralta Rojas",
+                  "years": "Vivo",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Amparo",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Ricardo Peralta Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Catalina Torres",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Jesus Peralta Rojas",
+                  "years": "Vivo",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "María Elena Sánchez",
+                    "years": "Viva",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Federico Peralta Rojas",
+                  "years": "Vivo",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Graciela Gudiño",
+                    "years": "Viva",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Jose Trinidad Peralta Rojas",
+                  "years": "1936–Fallecido",
+                  "gender": "Hombre"
+                }
+              ],
               "children": [
                 {
                   "name": "Trinidad Peralta",
