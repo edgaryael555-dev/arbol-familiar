@@ -18,30 +18,34 @@
             {
               "name": "Pablo Miranda",
               "years": "Fallecido",
-              "gender": "Hombre"
+              "gender": "Hombre",
+              "spouse": "Consuelo Valverde Rodeo"
             },
             {
               "name": "Consuelo Valverde Rodeo",
               "years": "Fallecida",
-              "gender": "Mujer"
+              "gender": "Mujer",
+              "spouse": "Pablo Miranda"
             }
           ]
         },
         {
           "name": "Elena Guillermo Jiménez",
-          "years": "1933–Viva",
+          "years": "Viva",
           "gender": "Mujer",
           "spouse": "Antonio Miranda Valverde",
           "children": [
             {
               "name": "Juan Guillermo",
               "years": "Fallecido",
-              "gender": "Hombre"
+              "gender": "Hombre",
+              "spouse": "Ignacia Jiménez"
             },
             {
               "name": "Ignacia Jiménez",
               "years": "Fallecida",
-              "gender": "Mujer"
+              "gender": "Mujer",
+              "spouse": "Juan Guillermo"
             }
           ]
         },
@@ -86,12 +90,28 @@
                     {
                       "name": "Trinidad Peralta",
                       "years": "Fallecido",
-                      "gender": "Hombre"
+                      "gender": "Hombre",
+                      "spouse": "María Guadalupe Fuentes",
+                      "children": [
+                        {
+                          "name": "Felipe Peralta Alvarado",
+                          "years": "Fallecido",
+                          "gender": "Hombre"
+                        }
+                      ]
                     },
                     {
                       "name": "María Guadalupe Fuentes",
                       "years": "Fallecida",
-                      "gender": "Mujer"
+                      "gender": "Mujer",
+                      "spouse": "Trinidad Peralta",
+                      "children": [
+                        {
+                          "name": "Leinia",
+                          "years": "Fallecida",
+                          "gender": "Mujer"
+                        }
+                      ]
                     }
                   ]
                 },
@@ -104,22 +124,26 @@
                     {
                       "name": "Lorenzo Rojas",
                       "years": "Fallecido",
-                      "gender": "Hombre"
+                      "gender": "Hombre",
+                      "spouse": "Josefa Ledesma Dorante"
                     },
                     {
                       "name": "Josefa Ledesma Dorante",
                       "years": "–1941",
                       "gender": "Mujer",
+                      "spouse": "Lorenzo Rojas",
                       "children": [
                         {
                           "name": "Gabino Ledesma",
                           "years": "1860–Fallecido",
-                          "gender": "Hombre"
+                          "gender": "Hombre",
+                          "spouse": "Higinia Dorante"
                         },
                         {
                           "name": "Higinia Dorante",
                           "years": "1863–Fallecida",
-                          "gender": "Mujer"
+                          "gender": "Mujer",
+                          "spouse": "Gabino Ledesma"
                         }
                       ]
                     }
@@ -132,10 +156,22 @@
                   "spouse": "Amparo"
                 },
                 {
+                  "name": "Amparo",
+                  "years": "Fallecida",
+                  "gender": "Mujer",
+                  "spouse": "Teodoro Peralta Rojas"
+                },
+                {
                   "name": "Ricardo Peralta Rojas",
                   "years": "Fallecido",
                   "gender": "Hombre",
                   "spouse": "Catalina Torres"
+                },
+                {
+                  "name": "Catalina Torres",
+                  "years": "Fallecida",
+                  "gender": "Mujer",
+                  "spouse": "Ricardo Peralta Rojas"
                 },
                 {
                   "name": "Jesus Peralta Rojas",
@@ -144,10 +180,22 @@
                   "spouse": "María Elena Sánchez"
                 },
                 {
+                  "name": "María Elena Sánchez",
+                  "years": "Viva",
+                  "gender": "Mujer",
+                  "spouse": "Jesus Peralta Rojas"
+                },
+                {
                   "name": "Federico Peralta Rojas",
                   "years": "Vivo",
                   "gender": "Hombre",
                   "spouse": "Graciela Gudiño"
+                },
+                {
+                  "name": "Graciela Gudiño",
+                  "years": "Viva",
+                  "gender": "Mujer",
+                  "spouse": "Federico Peralta Rojas"
                 },
                 {
                   "name": "Jose Trinidad Peralta Rojas",
