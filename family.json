@@ -2,33 +2,28 @@
   "name": "Edgar Yael Miranda Islas",
   "years": "2001–Vivo",
   "gender": "Hombre",
-  "id": "P8Q6-TRF",
   "children": [
     {
       "name": "Juan Pablo Miranda Guillermo",
       "years": "1971–Vivo",
       "gender": "Hombre",
       "spouse": "María del Rocio Islas Peralta",
-      "id": "P8Q6-TRG",
       "children": [
         {
           "name": "Antonio Miranda Valverde",
           "years": "1927–1975",
           "gender": "Hombre",
           "spouse": "Elena Guillermo Jiménez",
-          "id": "PCY7-FRZ",
           "children": [
             {
               "name": "Pablo Miranda",
               "years": "Fallecido",
-              "gender": "Hombre",
-              "id": "PCY7-TTR"
+              "gender": "Hombre"
             },
             {
               "name": "Consuelo Valverde Rodeo",
               "years": "Fallecida",
-              "gender": "Mujer",
-              "id": "PCY7-3GT"
+              "gender": "Mujer"
             }
           ]
         },
@@ -37,19 +32,16 @@
           "years": "1933–Viva",
           "gender": "Mujer",
           "spouse": "Antonio Miranda Valverde",
-          "id": "P8Q6-TRB",
           "children": [
             {
               "name": "Juan Guillermo",
               "years": "Fallecido",
-              "gender": "Hombre",
-              "id": "PCY7-493"
+              "gender": "Hombre"
             },
             {
               "name": "Ignacia Jiménez",
               "years": "Fallecida",
-              "gender": "Mujer",
-              "id": "PCY7-57F"
+              "gender": "Mujer"
             }
           ]
         },
@@ -58,28 +50,24 @@
           "years": "1973–Viva",
           "gender": "Mujer",
           "spouse": "Juan Pablo Miranda Guillermo",
-          "id": "P8Q6-YS8",
           "children": [
             {
               "name": "Roman Islas Bautista",
               "years": "1925–1981",
               "gender": "Hombre",
               "spouse": "Guadalupe Peralta Rojas",
-              "id": "PCYQ-9KW",
               "children": [
                 {
                   "name": "Jose Guadalupe Islas Lucio",
                   "years": "1848–1943",
                   "gender": "Hombre",
-                  "spouse": "María Guadalupe Bautista Pastén",
-                  "id": "L7WQ-19S"
+                  "spouse": "María Guadalupe Bautista Pastén"
                 },
                 {
                   "name": "María Guadalupe Bautista Pastén",
                   "years": "1871–1948",
                   "gender": "Mujer",
-                  "spouse": "Jose Guadalupe Islas Lucio",
-                  "id": "G6RT-YBB"
+                  "spouse": "Jose Guadalupe Islas Lucio"
                 }
               ]
             },
@@ -88,26 +76,22 @@
               "years": "1925–2018",
               "gender": "Mujer",
               "spouse": "Roman Islas Bautista",
-              "id": "PCY3-LMG",
               "children": [
                 {
                   "name": "Teodoro Peralta Fuentes",
                   "years": "Fallecido",
                   "gender": "Hombre",
                   "spouse": "Herlinda Rojas Ledezma",
-                  "id": "PCY7-4TV",
                   "children": [
                     {
                       "name": "Trinidad Peralta",
                       "years": "Fallecido",
-                      "gender": "Hombre",
-                      "id": "P83R-W5B"
+                      "gender": "Hombre"
                     },
                     {
                       "name": "María Guadalupe Fuentes",
                       "years": "Fallecida",
-                      "gender": "Mujer",
-                      "id": "L7DS-G4C"
+                      "gender": "Mujer"
                     }
                   ]
                 },
@@ -116,31 +100,26 @@
                   "years": "1900–Fallecida",
                   "gender": "Mujer",
                   "spouse": "Teodoro Peralta Fuentes",
-                  "id": "PCYQ-NNX",
                   "children": [
                     {
                       "name": "Lorenzo Rojas",
                       "years": "Fallecido",
-                      "gender": "Hombre",
-                      "id": "P83G-GGK"
+                      "gender": "Hombre"
                     },
                     {
                       "name": "Josefa Ledesma Dorante",
                       "years": "–1941",
                       "gender": "Mujer",
-                      "id": "KNR7-MX9",
                       "children": [
                         {
                           "name": "Gabino Ledesma",
                           "years": "1860–Fallecido",
-                          "gender": "Hombre",
-                          "id": "G1HV-8VS"
+                          "gender": "Hombre"
                         },
                         {
                           "name": "Higinia Dorante",
                           "years": "1863–Fallecida",
-                          "gender": "Mujer",
-                          "id": "G1HV-DLH"
+                          "gender": "Mujer"
                         }
                       ]
                     }
@@ -150,35 +129,30 @@
                   "name": "Teodoro Peralta Rojas",
                   "years": "Vivo",
                   "gender": "Hombre",
-                  "id": "P8Q6-T1P",
                   "spouse": "Amparo"
                 },
                 {
                   "name": "Ricardo Peralta Rojas",
                   "years": "Fallecido",
                   "gender": "Hombre",
-                  "id": "PCY7-KX1",
                   "spouse": "Catalina Torres"
                 },
                 {
                   "name": "Jesus Peralta Rojas",
                   "years": "Vivo",
                   "gender": "Hombre",
-                  "id": "P8Q6-Y9R",
                   "spouse": "María Elena Sánchez"
                 },
                 {
                   "name": "Federico Peralta Rojas",
                   "years": "Vivo",
                   "gender": "Hombre",
-                  "id": "P8Q6-Y9K",
                   "spouse": "Graciela Gudiño"
                 },
                 {
                   "name": "Jose Trinidad Peralta Rojas",
                   "years": "1936–Fallecido",
-                  "gender": "Hombre",
-                  "id": "P8QX-71V"
+                  "gender": "Hombre"
                 }
               ]
             }
