@@ -80,7 +80,7 @@
       stroke-width: 1.5px;
       rx: 16;
       ry: 16;
-      filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.14));
+      filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.13));
     }
 
     .male {
@@ -105,7 +105,7 @@
     }
 
     .heart {
-      font-size: 18px;
+      font-size: 17px;
       fill: #d9467a;
     }
 
@@ -117,7 +117,7 @@
 
     .toggle-text {
       fill: #0b86a8;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: bold;
       dominant-baseline: middle;
     }
@@ -158,10 +158,10 @@
 
     const cardWidth = 155;
     const cardHeight = 106;
-    const coupleGap = 18;
-    const levelGap = 220;
+    const coupleGap = 10;
+    const levelGap = 175;
 
-    const treeLayout = d3.tree().nodeSize([380, levelGap]);
+    const treeLayout = d3.tree().nodeSize([250, levelGap]);
 
     function hasSpouse(d) {
       return d.data.spouse && typeof d.data.spouse === "object";
@@ -177,6 +177,14 @@
       if (person.gender === "Hombre") return "person-box male";
       if (person.gender === "Mujer") return "person-box female";
       return "person-box";
+    }
+
+    function hasAncestors(d) {
+      return d.children || d._children;
+    }
+
+    function hasDescendants(d) {
+      return d.data.descendants && d.data.descendants.length > 0;
     }
 
     function wrapText(textSelection, maxWidth) {
@@ -256,7 +264,7 @@
 
         svg.call(
           zoom.transform,
-          d3.zoomIdentity.translate(width / 2, 40).scale(0.75)
+          d3.zoomIdentity.translate(width / 2, 30).scale(0.9)
         );
 
         document.getElementById("expandAll").addEventListener("click", () => {
@@ -296,6 +304,16 @@
           }
         }
 
+        function toggleAncestors(d) {
+          if (d.children) {
+            d._children = d.children;
+            d.children = null;
+          } else if (d._children) {
+            d.children = d._children;
+            d._children = null;
+          }
+        }
+
         function update(source) {
           treeLayout(root);
 
@@ -317,10 +335,10 @@
             .duration(300)
             .attr("d", d => {
               const sourceX = d.source.x;
-              const sourceY = d.source.y - cardHeight / 2 - 18;
+              const sourceY = d.source.y - cardHeight / 2 - 22;
 
               const targetX = d.target.x;
-              const targetY = d.target.y + cardHeight / 2 + 18;
+              const targetY = d.target.y + cardHeight / 2 + 8;
 
               const midY = (sourceY + targetY) / 2;
 
@@ -340,22 +358,7 @@
           const nodeEnter = node.enter()
             .append("g")
             .attr("class", "person-card")
-            .attr("transform", d => `translate(${source.x0 || 0},${source.y0 || 0})`)
-            .on("click", (event, d) => {
-              if (event.target.tagName === "circle" || event.target.tagName === "text") {
-                event.stopPropagation();
-              }
-
-              if (d.children) {
-                d._children = d.children;
-                d.children = null;
-              } else if (d._children) {
-                d.children = d._children;
-                d._children = null;
-              }
-
-              update(d);
-            });
+            .attr("transform", d => `translate(${source.x0 || 0},${source.y0 || 0})`);
 
           nodeEnter.each(function(d) {
             const group = d3.select(this);
@@ -379,18 +382,44 @@
           });
 
           nodeEnter.append("circle")
-            .attr("class", "toggle-circle")
-            .attr("cx", d => groupWidth(d) / 2 - 4)
-            .attr("cy", -cardHeight / 2 + 4)
-            .attr("r", 14)
-            .style("display", d => d.children || d._children ? "block" : "none");
+            .attr("class", "toggle-circle ancestor-toggle")
+            .attr("cx", 0)
+            .attr("cy", -cardHeight / 2 - 12)
+            .attr("r", 13)
+            .style("display", d => hasAncestors(d) ? "block" : "none")
+            .on("click", (event, d) => {
+              event.stopPropagation();
+              toggleAncestors(d);
+              update(d);
+            });
 
           nodeEnter.append("text")
-            .attr("class", "toggle-text")
+            .attr("class", "toggle-text ancestor-toggle-text")
             .attr("text-anchor", "middle")
-            .attr("x", d => groupWidth(d) / 2 - 4)
-            .attr("y", -cardHeight / 2 + 5)
-            .text(d => d._children ? "+" : d.children ? "−" : "");
+            .attr("x", 0)
+            .attr("y", -cardHeight / 2 - 11)
+            .style("display", d => hasAncestors(d) ? "block" : "none")
+            .text(d => d._children ? "+" : d.children ? "−" : "")
+            .on("click", (event, d) => {
+              event.stopPropagation();
+              toggleAncestors(d);
+              update(d);
+            });
+
+          nodeEnter.append("circle")
+            .attr("class", "toggle-circle descendant-toggle")
+            .attr("cx", 0)
+            .attr("cy", cardHeight / 2 + 12)
+            .attr("r", 13)
+            .style("display", d => hasDescendants(d) ? "block" : "none");
+
+          nodeEnter.append("text")
+            .attr("class", "toggle-text descendant-toggle-text")
+            .attr("text-anchor", "middle")
+            .attr("x", 0)
+            .attr("y", cardHeight / 2 + 13)
+            .style("display", d => hasDescendants(d) ? "block" : "none")
+            .text("+");
 
           const nodeUpdate = nodeEnter.merge(node);
 
@@ -398,11 +427,18 @@
             .duration(300)
             .attr("transform", d => `translate(${d.x},${d.y})`);
 
-          nodeUpdate.select(".toggle-text")
+          nodeUpdate.select(".ancestor-toggle")
+            .style("display", d => hasAncestors(d) ? "block" : "none");
+
+          nodeUpdate.select(".ancestor-toggle-text")
+            .style("display", d => hasAncestors(d) ? "block" : "none")
             .text(d => d._children ? "+" : d.children ? "−" : "");
 
-          nodeUpdate.select(".toggle-circle")
-            .style("display", d => d.children || d._children ? "block" : "none");
+          nodeUpdate.select(".descendant-toggle")
+            .style("display", d => hasDescendants(d) ? "block" : "none");
+
+          nodeUpdate.select(".descendant-toggle-text")
+            .style("display", d => hasDescendants(d) ? "block" : "none");
 
           node.exit().remove();
 
