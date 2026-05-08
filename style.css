@@ -65,6 +65,10 @@ header h1 { margin: 0; font-size: 20px; font-weight: 700; }
 .heart { font-size: 17px; fill: #d9467a; }
 .toggle-arrow { fill: none; stroke: #6b8a96; stroke-width: 1.4px; stroke-linecap: round; stroke-linejoin: round; cursor: pointer; opacity: 0.75; }
 .sibling-card { opacity: 0.96; }
+/* Oculta etiquetas de parentesco lateral (ej. "Hermano/a"). */
+.relationship-label,
+.sibling-label,
+.relation-label { display: none !important; }
 
 .person-card.highlight .person-box {
   stroke: #f59e0b;
