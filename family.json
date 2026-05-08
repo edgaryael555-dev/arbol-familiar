@@ -3,7 +3,11 @@
   "years": "2001–Vivo",
   "gender": "Hombre",
   "siblings": [
-    { "name": "Daniel Yeray Miranda Islas", "years": "2006–Vivo", "gender": "Hombre" }
+    {
+      "name": "Daniel Yeray Miranda Islas",
+      "years": "2006–Vivo",
+      "gender": "Hombre"
+    }
   ],
   "children": [
     {
@@ -15,13 +19,68 @@
         "years": "1973–Viva",
         "gender": "Mujer",
         "siblings": [
-          { "name": "Jose Humberto Roman Islas Peralta", "years": "Vivo", "gender": "Hombre", "spouse": { "name": "Ethel Patricia Villagómez Aragón", "years": "Viva", "gender": "Mujer" } },
-          { "name": "Noé Teodóro Islas Peralta", "years": "Vivo", "gender": "Hombre" },
-          { "name": "Lucia Emma Islas Peralta", "years": "Viva", "gender": "Mujer", "spouse": { "name": "Ambrocio Godínez Gonzáles", "years": "Vivo", "gender": "Hombre" } },
-          { "name": "Jose Islas Peralta", "years": "Vivo", "gender": "Hombre" },
-          { "name": "Jose Román Emiliano Islas Peralta", "years": "Vivo", "gender": "Hombre" },
-          { "name": "María Guadalupe Islas Peralta", "years": "Viva", "gender": "Mujer", "spouse": { "name": "Abraham Méndez Villagómez", "years": "Vivo", "gender": "Hombre" } },
-          { "name": "Jose Benito Roberto Islas Peralta", "years": "Vivo", "gender": "Hombre" }
+          {
+            "name": "Jose Humberto Roman Islas Peralta",
+            "years": "Vivo",
+            "gender": "Hombre",
+            "spouse": {
+              "name": "Ethel Patricia Villagómez Aragón",
+              "years": "Viva",
+              "gender": "Mujer"
+            },
+            "children": [
+              {
+                "name": "Noé Humberto Islas Villagómez",
+                "years": "Vivo",
+                "gender": "Hombre"
+              },
+              {
+                "name": "Ethel Patricia Islas Villagómez",
+                "years": "Viva",
+                "gender": "Mujer"
+              }
+            ]
+          },
+          {
+            "name": "Noé Teodóro Islas Peralta",
+            "years": "Vivo",
+            "gender": "Hombre"
+          },
+          {
+            "name": "Lucia Emma Islas Peralta",
+            "years": "Viva",
+            "gender": "Mujer",
+            "spouse": {
+              "name": "Ambrocio Godínez Gonzáles",
+              "years": "Vivo",
+              "gender": "Hombre"
+            }
+          },
+          {
+            "name": "Jose Islas Peralta",
+            "years": "Vivo",
+            "gender": "Hombre"
+          },
+          {
+            "name": "Jose Román Emiliano Islas Peralta",
+            "years": "Vivo",
+            "gender": "Hombre"
+          },
+          {
+            "name": "María Guadalupe Islas Peralta",
+            "years": "Viva",
+            "gender": "Mujer",
+            "spouse": {
+              "name": "Abraham Méndez Villagómez",
+              "years": "Vivo",
+              "gender": "Hombre"
+            }
+          },
+          {
+            "name": "Jose Benito Roberto Islas Peralta",
+            "years": "Vivo",
+            "gender": "Hombre"
+          }
         ]
       },
       "siblings": [
@@ -29,24 +88,57 @@
           "name": "Magdalena Miranda Guillermo",
           "years": "Viva",
           "gender": "Mujer",
-          "spouse": { "name": "Enrique Rojo", "years": "Vivo", "gender": "Hombre" },
+          "spouse": {
+            "name": "Enrique Rojo",
+            "years": "Vivo",
+            "gender": "Hombre"
+          },
           "children": [
             {
               "name": "Argenin Amayelis Miranda Rojo",
               "years": "Viva",
               "gender": "Mujer",
-              "spouse": { "name": "José", "years": "Vivo", "gender": "Hombre" },
-              "children": [{ "name": "Anjeni Miranda", "years": "Viva", "gender": "Mujer" }]
+              "spouse": {
+                "name": "José",
+                "years": "Vivo",
+                "gender": "Hombre"
+              },
+              "children": [
+                {
+                  "name": "Anjeni Miranda",
+                  "years": "Viva",
+                  "gender": "Mujer"
+                }
+              ]
             }
           ]
         },
-        { "name": "José Antonio Miranda Guillermo", "years": "Vivo", "gender": "Hombre", "spouse": { "name": "Inés", "years": "Viva", "gender": "Mujer" } },
+        {
+          "name": "José Antonio Miranda Guillermo",
+          "years": "Vivo",
+          "gender": "Hombre",
+          "spouse": {
+            "name": "Inés",
+            "years": "Viva",
+            "gender": "Mujer"
+          }
+        },
         {
           "name": "Ernesto Rafael Miranda Guillermo",
           "years": "1974–Vivo",
           "gender": "Hombre",
-          "spouse": { "name": "Anne Ortengren", "years": "1974–Viva", "gender": "Mujer" },
-          "children": [{ "name": "Elena Miranda Ortengren", "years": "2016–Viva", "gender": "Mujer" }]
+          "spouse": {
+            "name": "Anne Ortengren",
+            "years": "1974–Viva",
+            "gender": "Mujer"
+          },
+          "children": [
+            {
+              "name": "Elena Miranda Ortengren",
+              "years": "2016–Viva",
+              "gender": "Mujer"
+            }
+          ]
         }
       ],
       "children": [
@@ -54,58 +146,170 @@
           "name": "Antonio Miranda Valverde",
           "years": "1927–1975",
           "gender": "Hombre",
-          "spouse": { "name": "Elena Guillermo Jiménez", "years": "1933–Viva", "gender": "Mujer" },
+          "spouse": {
+            "name": "Elena Guillermo Jiménez",
+            "years": "1933–Viva",
+            "gender": "Mujer"
+          },
           "siblings": [
             {
               "name": "Bulmaro Miranda Valverde",
               "years": "Fallecido",
               "gender": "Hombre",
-              "spouse": { "name": "Conrrada Villeda", "years": "Fallecida", "gender": "Mujer" },
+              "spouse": {
+                "name": "Conrrada Villeda",
+                "years": "Fallecida",
+                "gender": "Mujer"
+              },
               "children": [
-                { "name": "Minerva Miranda Villeda", "years": "Viva", "gender": "Mujer" },
-                { "name": "María del Consuelo Miranda Villeda", "years": "Viva", "gender": "Mujer" },
-                { "name": "Guadalupe Miranda Villeda", "years": "Viva", "gender": "Mujer" },
-                { "name": "Francisco Javier Miranda Villeda", "years": "Vivo", "gender": "Hombre" }
+                {
+                  "name": "Minerva Miranda Villeda",
+                  "years": "Viva",
+                  "gender": "Mujer"
+                },
+                {
+                  "name": "María del Consuelo Miranda Villeda",
+                  "years": "Viva",
+                  "gender": "Mujer"
+                },
+                {
+                  "name": "Guadalupe Miranda Villeda",
+                  "years": "Viva",
+                  "gender": "Mujer"
+                },
+                {
+                  "name": "Francisco Javier Miranda Villeda",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                }
               ]
             }
           ],
           "children": [
-            { "name": "Pablo Miranda", "years": "Fallecido", "gender": "Hombre", "spouse": { "name": "Consuelo Valverde Rodeo", "years": "Fallecida", "gender": "Mujer" } },
+            {
+              "name": "Pablo Miranda",
+              "years": "Fallecido",
+              "gender": "Hombre",
+              "spouse": {
+                "name": "Consuelo Valverde Rodeo",
+                "years": "Fallecida",
+                "gender": "Mujer"
+              }
+            },
             {
               "name": "Juan Guillermo",
               "years": "Fallecido",
               "gender": "Hombre",
-              "spouse": { "name": "Ignacia Jiménez", "years": "Fallecida", "gender": "Mujer" },
+              "spouse": {
+                "name": "Ignacia Jiménez",
+                "years": "Fallecida",
+                "gender": "Mujer"
+              },
               "children": [
-                { "name": "Tina Guillermo Jiménez", "years": "Fallecida", "gender": "Mujer" },
-                { "name": "Tacho Guillermo Jiménez", "years": "Fallecido", "gender": "Hombre" },
-                { "name": "Nacho Guillermo Jiménez", "years": "Fallecido", "gender": "Hombre", "spouse": { "name": "Senaida", "years": "Fallecida", "gender": "Mujer" } },
+                {
+                  "name": "Tina Guillermo Jiménez",
+                  "years": "Fallecida",
+                  "gender": "Mujer"
+                },
+                {
+                  "name": "Tacho Guillermo Jiménez",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Nacho Guillermo Jiménez",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Senaida",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
                 {
                   "name": "Meche Guillermo Jiménez",
                   "years": "Fallecida",
                   "gender": "Mujer",
-                  "spouse": { "name": "Enrique Franco", "years": "Fallecido", "gender": "Hombre" },
+                  "spouse": {
+                    "name": "Enrique Franco",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  },
                   "children": [
-                    { "name": "Susy", "years": "Viva", "gender": "Mujer" },
-                    { "name": "Oscar", "years": "Vivo", "gender": "Hombre" },
-                    { "name": "Miguel", "years": "Vivo", "gender": "Hombre" },
-                    { "name": "Enrique", "years": "Vivo", "gender": "Hombre" },
-                    { "name": "Andrea", "years": "Viva", "gender": "Mujer" }
+                    {
+                      "name": "Susy",
+                      "years": "Viva",
+                      "gender": "Mujer"
+                    },
+                    {
+                      "name": "Oscar",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    },
+                    {
+                      "name": "Miguel",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    },
+                    {
+                      "name": "Enrique",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    },
+                    {
+                      "name": "Andrea",
+                      "years": "Viva",
+                      "gender": "Mujer"
+                    }
                   ]
                 },
                 {
                   "name": "Lucha Guillermo Jiménez",
                   "years": "Fallecida",
                   "gender": "Mujer",
-                  "spouse": { "name": "Facundo", "years": "Fallecido", "gender": "Hombre" },
+                  "spouse": {
+                    "name": "Facundo",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  },
                   "children": [
-                    { "name": "Facundo", "years": "Vivo", "gender": "Hombre" },
-                    { "name": "Chelo", "years": "Viva", "gender": "Mujer" }
+                    {
+                      "name": "Facundo",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    },
+                    {
+                      "name": "Chelo",
+                      "years": "Viva",
+                      "gender": "Mujer"
+                    }
                   ]
                 },
-                { "name": "Gonzalo Guillermo Jiménez", "years": "Fallecido", "gender": "Hombre" },
-                { "name": "Esteban Guillermo Jiménez", "years": "Fallecido", "gender": "Hombre", "spouse": { "name": "Esposa", "years": "Fallecida", "gender": "Mujer" } },
-                { "name": "Baby Guillermo Jiménez", "years": "Fallecida", "gender": "Mujer", "spouse": { "name": "Omar Luna", "years": "Fallecido", "gender": "Hombre" } }
+                {
+                  "name": "Gonzalo Guillermo Jiménez",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Esteban Guillermo Jiménez",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Esposa",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Baby Guillermo Jiménez",
+                  "years": "Fallecida",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "Omar Luna",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  }
+                }
               ]
             }
           ]
@@ -114,47 +318,491 @@
           "name": "Roman Islas Bautista",
           "years": "1925–1981",
           "gender": "Hombre",
-          "spouse": { "name": "Guadalupe Peralta Rojas", "years": "1925–2018", "gender": "Mujer" },
+          "spouse": {
+            "name": "Guadalupe Peralta Rojas",
+            "years": "1925–2018",
+            "gender": "Mujer"
+          },
           "siblings": [
-            { "name": "Rosa Islas Bautista", "years": "Fallecida", "gender": "Mujer" },
-            { "name": "Luciana Islas Bautista", "years": "Fallecida", "gender": "Mujer" },
-            { "name": "Felipa Islas Bautista", "years": "Fallecida", "gender": "Mujer", "spouse": { "name": "Rojas", "years": "Fallecido", "gender": "Hombre" } },
+            {
+              "name": "Rosa Islas Bautista",
+              "years": "Fallecida",
+              "gender": "Mujer"
+            },
+            {
+              "name": "Luciana Islas Bautista",
+              "years": "Fallecida",
+              "gender": "Mujer"
+            },
+            {
+              "name": "Felipa Islas Bautista",
+              "years": "Fallecida",
+              "gender": "Mujer",
+              "spouse": {
+                "name": "Rojas",
+                "years": "Fallecido",
+                "gender": "Hombre"
+              }
+            },
             {
               "name": "Aurelio Islas Bautista",
               "years": "Fallecido",
               "gender": "Hombre",
-              "spouse": { "name": "Petra Limón González", "years": "Fallecida", "gender": "Mujer" },
+              "spouse": {
+                "name": "Petra Limón González",
+                "years": "Fallecida",
+                "gender": "Mujer"
+              },
               "children": [
-                { "name": "Manuel Islas Limón", "years": "Vivo", "gender": "Hombre" },
-                { "name": "Gerardo Islas Limón", "years": "Vivo", "gender": "Hombre" },
-                { "name": "Eduardo Islas Limón", "years": "Vivo", "gender": "Hombre" },
-                { "name": "Susana Islas Limón", "years": "Viva", "gender": "Mujer", "spouse": { "name": "Demetrio Felipe Cardeña Sosa", "years": "Vivo", "gender": "Hombre" } }
+                {
+                  "name": "Manuel Islas Limón",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Gerardo Islas Limón",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Eduardo Islas Limón",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Susana Islas Limón",
+                  "years": "Viva",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "Demetrio Felipe Cardeña Sosa",
+                    "years": "Vivo",
+                    "gender": "Hombre"
+                  }
+                }
               ]
             },
-            { "name": "Angela Islas Bautista", "years": "Fallecida", "gender": "Mujer" },
-            { "name": "Felisa Islas Bautista", "years": "Fallecida", "gender": "Mujer", "spouse": { "name": "José Angel Mata Prado", "years": "Fallecido", "gender": "Hombre" }, "children": [{ "name": "Raul Mata Islas", "years": "Vivo", "gender": "Hombre" }] }
+            {
+              "name": "Angela Islas Bautista",
+              "years": "Fallecida",
+              "gender": "Mujer"
+            },
+            {
+              "name": "Felisa Islas Bautista",
+              "years": "Fallecida",
+              "gender": "Mujer",
+              "spouse": {
+                "name": "José Angel Mata Prado",
+                "years": "Fallecido",
+                "gender": "Hombre"
+              },
+              "children": [
+                {
+                  "name": "Raul Mata Islas",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                }
+              ]
+            }
           ],
           "children": [
             {
               "name": "Jose Guadalupe Islas Lucio",
               "years": "1848–1943",
               "gender": "Hombre",
-              "spouse": { "name": "María Guadalupe Bautista Pastén", "years": "1871–1948", "gender": "Mujer" }
+              "spouse": {
+                "name": "María Guadalupe Bautista Pastén",
+                "years": "1871–1948",
+                "gender": "Mujer"
+              },
+              "siblings": [
+                {
+                  "name": "Alvino Orozco",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Tomasa Islas",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "J. Florencio Narciso Yslas",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                }
+              ],
+              "children": [
+                {
+                  "name": "Rosa Islas Bautista",
+                  "years": "Fallecida",
+                  "gender": "Mujer"
+                },
+                {
+                  "name": "Luciana Islas Bautista",
+                  "years": "Fallecida",
+                  "gender": "Mujer"
+                },
+                {
+                  "name": "Felipa Islas Bautista",
+                  "years": "Fallecida",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "Rojas",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  }
+                },
+                {
+                  "name": "Aurelio Islas Bautista",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Petra Limón González",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  },
+                  "children": [
+                    {
+                      "name": "Manuel Islas Limón",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    },
+                    {
+                      "name": "Gerardo Islas Limón",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    },
+                    {
+                      "name": "Eduardo Islas Limón",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    },
+                    {
+                      "name": "Susana Islas Limón",
+                      "years": "Viva",
+                      "gender": "Mujer",
+                      "spouse": {
+                        "name": "Demetrio Felipe Cardeña Sosa",
+                        "years": "Vivo",
+                        "gender": "Hombre"
+                      },
+                      "children": [
+                        {
+                          "name": "Pedro Martin Cardeña Islas",
+                          "years": "Vivo",
+                          "gender": "Hombre"
+                        },
+                        {
+                          "name": "Ricardo Alberto Cardeña Islas",
+                          "years": "Vivo",
+                          "gender": "Hombre"
+                        },
+                        {
+                          "name": "Maria Magdalena Cardeña Islas",
+                          "years": "Viva",
+                          "gender": "Mujer"
+                        },
+                        {
+                          "name": "Angel Fernando Cardeña Islas",
+                          "years": "Vivo",
+                          "gender": "Hombre"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Angela Islas Bautista",
+                  "years": "Fallecida",
+                  "gender": "Mujer"
+                },
+                {
+                  "name": "Felisa Islas Bautista",
+                  "years": "Fallecida",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "José Angel Mata Prado",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  },
+                  "children": [
+                    {
+                      "name": "Raul Mata Islas",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "name": "Teodoro Peralta Fuentes",
               "years": "Fallecido",
               "gender": "Hombre",
-              "spouse": { "name": "Herlinda Rojas Ledezma", "years": "1900–Fallecida", "gender": "Mujer" },
+              "spouse": {
+                "name": "Herlinda Rojas Ledezma",
+                "years": "1900–Fallecida",
+                "gender": "Mujer"
+              },
               "siblings": [
-                { "name": "Vicente Rojas Ledezma", "years": "1902–Fallecido", "gender": "Hombre", "spouse": { "name": "Magdalena Pineda", "years": "Fallecida", "gender": "Mujer" } },
-                { "name": "Nicolas Rojas Ledezma", "years": "Fallecido", "gender": "Hombre" },
-                { "name": "Manuel Rojas Ledezma", "years": "Fallecido", "gender": "Hombre" }
+                {
+                  "name": "Vicente Rojas Ledezma",
+                  "years": "1902–Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Magdalena Pineda",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Nicolas Rojas Ledezma",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Manuel Rojas Ledezma",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Juana Rojas Ledesma",
+                  "years": "Fallecida",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "Rosales",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  }
+                },
+                {
+                  "name": "José Rojas Ledezma",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Benita Peralta Fuentes",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "José Carlos Valdivia",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Guadalupe Rojas Ledezma",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Narciso Rojas Ledesma",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Lorenza Rojas Ledezma",
+                  "years": "Fallecida",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "García",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  }
+                },
+                {
+                  "name": "Vicente De Paul Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Magdalena Pineda Flores",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                }
               ],
               "children": [
-                { "name": "Trinidad Peralta", "years": "Fallecido", "gender": "Hombre", "spouse": { "name": "María Guadalupe Fuentes", "years": "Fallecida", "gender": "Mujer" } },
-                { "name": "Lorenzo Rojas", "years": "Fallecido", "gender": "Hombre", "spouse": { "name": "Josefa Ledesma Dorante", "years": "–1941", "gender": "Mujer" } }
+                {
+                  "name": "Trinidad Peralta",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "María Guadalupe Fuentes",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Lorenzo Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Josefa Ledesma Dorante",
+                    "years": "–1941",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Teodoro Peralta Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Amparo",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  },
+                  "children": [
+                    {
+                      "name": "Luis Peralta",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    },
+                    {
+                      "name": "Adriana Peralta",
+                      "years": "Viva",
+                      "gender": "Mujer"
+                    }
+                  ]
+                },
+                {
+                  "name": "Ricardo Peralta Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Catalina Torres",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Jesus Peralta Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "María Elena Sánchez",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Federico Peralta Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Graciela Gudiño",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Jose Trinidad Peralta Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                }
               ]
+            },
+            {
+              "name": "Jose Humberto Roman Islas Peralta",
+              "years": "Vivo",
+              "gender": "Hombre",
+              "spouse": {
+                "name": "Ethel Patricia Villagómez Aragón",
+                "years": "Viva",
+                "gender": "Mujer"
+              },
+              "children": [
+                {
+                  "name": "Noé Humberto Islas Villagómez",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Ethel Patricia Islas Villagómez",
+                  "years": "Viva",
+                  "gender": "Mujer"
+                }
+              ]
+            },
+            {
+              "name": "Noé Teodóro Islas Peralta",
+              "years": "Vivo",
+              "gender": "Hombre"
+            },
+            {
+              "name": "Lucia Emma Islas Peralta",
+              "years": "Viva",
+              "gender": "Mujer",
+              "spouse": {
+                "name": "Ambrocio Godínez Gonzáles",
+                "years": "Vivo",
+                "gender": "Hombre"
+              },
+              "children": [
+                {
+                  "name": "César Eduardo Godínez Islas",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Sergio Roman Godínez Islas",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Moisés Gilberto Godínez Islas",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                }
+              ]
+            },
+            {
+              "name": "Jose Islas Peralta",
+              "years": "Vivo",
+              "gender": "Hombre"
+            },
+            {
+              "name": "Jose Román Emiliano Islas Peralta",
+              "years": "Vivo",
+              "gender": "Hombre"
+            },
+            {
+              "name": "María Guadalupe Islas Peralta",
+              "years": "Viva",
+              "gender": "Mujer",
+              "spouse": {
+                "name": "Abraham Méndez Villagómez",
+                "years": "Vivo",
+                "gender": "Hombre"
+              },
+              "children": [
+                {
+                  "name": "Rubén Román Méndez Islas",
+                  "years": "Vivo",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Beatriz Méndez Islas",
+                  "years": "Viva",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "Rodolfo Martínez Sánchez",
+                    "years": "Vivo",
+                    "gender": "Hombre"
+                  },
+                  "children": [
+                    {
+                      "name": "Gerardo Martínez Méndez",
+                      "years": "Vivo",
+                      "gender": "Hombre"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Jose Benito Roberto Islas Peralta",
+              "years": "Vivo",
+              "gender": "Hombre"
             }
           ]
         }
