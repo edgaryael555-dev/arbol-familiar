@@ -7,145 +7,115 @@
       "name": "Juan Pablo Miranda Guillermo",
       "years": "1971–Vivo",
       "gender": "Hombre",
-      "spouse": "María del Rocio Islas Peralta",
+      "spouse": {
+        "name": "María del Rocio Islas Peralta",
+        "years": "1973–Viva",
+        "gender": "Mujer"
+      },
       "children": [
         {
           "name": "Antonio Miranda Valverde",
           "years": "1927–1975",
           "gender": "Hombre",
-          "spouse": "Elena Guillermo Jiménez",
+          "spouse": {
+            "name": "Elena Guillermo Jiménez",
+            "years": "1933–Viva",
+            "gender": "Mujer"
+          },
           "children": [
             {
               "name": "Pablo Miranda",
               "years": "Fallecido",
               "gender": "Hombre",
-              "spouse": "Consuelo Valverde Rodeo"
+              "spouse": {
+                "name": "Consuelo Valverde Rodeo",
+                "years": "Fallecida",
+                "gender": "Mujer"
+              }
             },
-            {
-              "name": "Consuelo Valverde Rodeo",
-              "years": "Fallecida",
-              "gender": "Mujer",
-              "spouse": "Pablo Miranda"
-            }
-          ]
-        },
-        {
-          "name": "Elena Guillermo Jiménez",
-          "years": "Viva",
-          "gender": "Mujer",
-          "spouse": "Antonio Miranda Valverde",
-          "children": [
             {
               "name": "Juan Guillermo",
               "years": "Fallecido",
               "gender": "Hombre",
-              "spouse": "Ignacia Jiménez"
-            },
-            {
-              "name": "Ignacia Jiménez",
-              "years": "Fallecida",
-              "gender": "Mujer",
-              "spouse": "Juan Guillermo"
+              "spouse": {
+                "name": "Ignacia Jiménez",
+                "years": "Fallecida",
+                "gender": "Mujer"
+              }
             }
           ]
         },
         {
-          "name": "María del Rocio Islas Peralta",
-          "years": "1973–Viva",
-          "gender": "Mujer",
-          "spouse": "Juan Pablo Miranda Guillermo",
+          "name": "Roman Islas Bautista",
+          "years": "1925–1981",
+          "gender": "Hombre",
+          "spouse": {
+            "name": "Guadalupe Peralta Rojas",
+            "years": "1925–2018",
+            "gender": "Mujer"
+          },
           "children": [
             {
-              "name": "Roman Islas Bautista",
-              "years": "1925–1981",
+              "name": "Jose Guadalupe Islas Lucio",
+              "years": "1848–1943",
               "gender": "Hombre",
-              "spouse": "Guadalupe Peralta Rojas",
-              "children": [
-                {
-                  "name": "Jose Guadalupe Islas Lucio",
-                  "years": "1848–1943",
-                  "gender": "Hombre",
-                  "spouse": "María Guadalupe Bautista Pastén"
-                },
-                {
-                  "name": "María Guadalupe Bautista Pastén",
-                  "years": "1871–1948",
-                  "gender": "Mujer",
-                  "spouse": "Jose Guadalupe Islas Lucio"
-                }
-              ]
+              "spouse": {
+                "name": "María Guadalupe Bautista Pastén",
+                "years": "1871–1948",
+                "gender": "Mujer"
+              }
             },
             {
-              "name": "Guadalupe Peralta Rojas",
-              "years": "1925–2018",
-              "gender": "Mujer",
-              "spouse": "Roman Islas Bautista",
+              "name": "Teodoro Peralta Fuentes",
+              "years": "Fallecido",
+              "gender": "Hombre",
+              "spouse": {
+                "name": "Herlinda Rojas Ledezma",
+                "years": "1900–Fallecida",
+                "gender": "Mujer"
+              },
               "children": [
                 {
-                  "name": "Teodoro Peralta Fuentes",
+                  "name": "Trinidad Peralta",
                   "years": "Fallecido",
                   "gender": "Hombre",
-                  "spouse": "Herlinda Rojas Ledezma",
+                  "spouse": {
+                    "name": "María Guadalupe Fuentes",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  },
                   "children": [
                     {
-                      "name": "Trinidad Peralta",
+                      "name": "Felipe Peralta Alvarado",
                       "years": "Fallecido",
-                      "gender": "Hombre",
-                      "spouse": "María Guadalupe Fuentes",
-                      "children": [
-                        {
-                          "name": "Felipe Peralta Alvarado",
-                          "years": "Fallecido",
-                          "gender": "Hombre"
-                        }
-                      ]
+                      "gender": "Hombre"
                     },
                     {
-                      "name": "María Guadalupe Fuentes",
+                      "name": "Leinia",
                       "years": "Fallecida",
-                      "gender": "Mujer",
-                      "spouse": "Trinidad Peralta",
-                      "children": [
-                        {
-                          "name": "Leinia",
-                          "years": "Fallecida",
-                          "gender": "Mujer"
-                        }
-                      ]
+                      "gender": "Mujer"
                     }
                   ]
                 },
                 {
-                  "name": "Herlinda Rojas Ledezma",
-                  "years": "1900–Fallecida",
-                  "gender": "Mujer",
-                  "spouse": "Teodoro Peralta Fuentes",
+                  "name": "Lorenzo Rojas",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Josefa Ledesma Dorante",
+                    "years": "–1941",
+                    "gender": "Mujer"
+                  },
                   "children": [
                     {
-                      "name": "Lorenzo Rojas",
-                      "years": "Fallecido",
+                      "name": "Gabino Ledesma",
+                      "years": "1860–Fallecido",
                       "gender": "Hombre",
-                      "spouse": "Josefa Ledesma Dorante"
-                    },
-                    {
-                      "name": "Josefa Ledesma Dorante",
-                      "years": "–1941",
-                      "gender": "Mujer",
-                      "spouse": "Lorenzo Rojas",
-                      "children": [
-                        {
-                          "name": "Gabino Ledesma",
-                          "years": "1860–Fallecido",
-                          "gender": "Hombre",
-                          "spouse": "Higinia Dorante"
-                        },
-                        {
-                          "name": "Higinia Dorante",
-                          "years": "1863–Fallecida",
-                          "gender": "Mujer",
-                          "spouse": "Gabino Ledesma"
-                        }
-                      ]
+                      "spouse": {
+                        "name": "Higinia Dorante",
+                        "years": "1863–Fallecida",
+                        "gender": "Mujer"
+                      }
                     }
                   ]
                 },
@@ -153,49 +123,41 @@
                   "name": "Teodoro Peralta Rojas",
                   "years": "Vivo",
                   "gender": "Hombre",
-                  "spouse": "Amparo"
-                },
-                {
-                  "name": "Amparo",
-                  "years": "Fallecida",
-                  "gender": "Mujer",
-                  "spouse": "Teodoro Peralta Rojas"
+                  "spouse": {
+                    "name": "Amparo",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
                 },
                 {
                   "name": "Ricardo Peralta Rojas",
                   "years": "Fallecido",
                   "gender": "Hombre",
-                  "spouse": "Catalina Torres"
-                },
-                {
-                  "name": "Catalina Torres",
-                  "years": "Fallecida",
-                  "gender": "Mujer",
-                  "spouse": "Ricardo Peralta Rojas"
+                  "spouse": {
+                    "name": "Catalina Torres",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
                 },
                 {
                   "name": "Jesus Peralta Rojas",
                   "years": "Vivo",
                   "gender": "Hombre",
-                  "spouse": "María Elena Sánchez"
-                },
-                {
-                  "name": "María Elena Sánchez",
-                  "years": "Viva",
-                  "gender": "Mujer",
-                  "spouse": "Jesus Peralta Rojas"
+                  "spouse": {
+                    "name": "María Elena Sánchez",
+                    "years": "Viva",
+                    "gender": "Mujer"
+                  }
                 },
                 {
                   "name": "Federico Peralta Rojas",
                   "years": "Vivo",
                   "gender": "Hombre",
-                  "spouse": "Graciela Gudiño"
-                },
-                {
-                  "name": "Graciela Gudiño",
-                  "years": "Viva",
-                  "gender": "Mujer",
-                  "spouse": "Federico Peralta Rojas"
+                  "spouse": {
+                    "name": "Graciela Gudiño",
+                    "years": "Viva",
+                    "gender": "Mujer"
+                  }
                 },
                 {
                   "name": "Jose Trinidad Peralta Rojas",
