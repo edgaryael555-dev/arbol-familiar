@@ -91,6 +91,10 @@
       return Array.isArray(d.data.siblings) && d.data.siblings.length > 0;
     }
 
+    function hasSpouseSiblings(d) {
+      return Array.isArray(d.data.spouse?.siblings) && d.data.spouse.siblings.length > 0;
+    }
+
     function wrapText(textSelection, maxWidth) {
       textSelection.each(function() {
         const text = d3.select(this);
@@ -127,10 +131,19 @@
       });
     }
 
-    function drawPersonCard(group, person, xOffset, yOffset = 0, extraClass = "") {
+    function drawPersonCard(group, person, xOffset, yOffset = 0, extraClass = "", relationLabel = "") {
       const card = group.append("g")
         .attr("class", extraClass)
         .attr("transform", `translate(${xOffset},${yOffset})`);
+
+      if (relationLabel) {
+        card.append("text")
+          .attr("class", "relation-label")
+          .attr("text-anchor", "middle")
+          .attr("x", 0)
+          .attr("y", -cardHeight / 2 - 10)
+          .text(relationLabel);
+      }
 
       card.append("rect")
         .attr("class", personClass(person))
@@ -166,8 +179,8 @@
         const leftX = -(cardWidth / 2 + coupleGap / 2);
         const rightX = cardWidth / 2 + coupleGap / 2;
 
-        drawPersonCard(wrapper, personData, leftX, 0);
-        drawPersonCard(wrapper, personData.spouse, rightX, 0);
+        drawPersonCard(wrapper, personData, leftX, 0, "", "Hijo/a");
+        drawPersonCard(wrapper, personData.spouse, rightX, 0, "", "Pareja");
 
         wrapper.append("text")
           .attr("class", "heart")
@@ -176,7 +189,7 @@
           .attr("y", 6)
           .text("♥");
       } else {
-        drawPersonCard(wrapper, personData, 0, 0);
+        drawPersonCard(wrapper, personData, 0, 0, "", "Hijo/a");
       }
 
       return wrapper;
@@ -197,7 +210,7 @@
     }
 
     function drawSiblingGroup(group, d) {
-      if (!d.siblingsExpanded || !hasSiblings(d)) return;
+      if (!d.siblingsExpanded || (!hasSiblings(d) && !hasSpouseSiblings(d))) return;
 
       const direction = getSiblingDirection(d);
       const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
@@ -218,9 +231,32 @@
               ${targetEdgeX},${yOffset}
           `);
 
-        const siblingGroup = drawCoupleOrSingle(group, sibling, xOffset, yOffset, "sibling-card");
-
+        drawCoupleOrSingle(group, sibling, xOffset, yOffset, "sibling-card");
       });
+
+      if (hasSpouseSiblings(d)) {
+        const spouseCenterX = cardWidth / 2 + coupleGap / 2;
+        const spouseDirection = -direction;
+        const spouseAnchorX = spouseCenterX + spouseDirection * (cardWidth / 2);
+        const spouseStartX = spouseAnchorX + spouseDirection * siblingGap;
+
+        d.data.spouse.siblings.forEach((sibling, index) => {
+          const yOffset = 0;
+          const xOffset = spouseStartX + spouseDirection * index * siblingColumnGap;
+          const targetEdgeX = xOffset - spouseDirection * (cardWidth / 2);
+
+          group.append("path")
+            .attr("class", "sibling-link spouse-sibling-link")
+            .attr("d", `
+              M ${spouseAnchorX},0
+              C ${spouseAnchorX + spouseDirection * 58},0
+                ${targetEdgeX - spouseDirection * 95},${yOffset}
+                ${targetEdgeX},${yOffset}
+            `);
+
+          drawCoupleOrSingle(group, sibling, xOffset, yOffset, "sibling-card spouse-sibling-card");
+        });
+      }
     }
 
     fetch("family.json")
@@ -351,7 +387,7 @@
                 ? `M ${bx + 4},-4 L ${bx},0 L ${bx + 4},4`
                 : `M ${bx},-4 L ${bx + 4},0 L ${bx},4`;
             })
-            .style("display", d => hasSiblings(d) ? "block" : "none")
+            .style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
 
           nodeEnter.append("path").attr("class", "toggle-arrow sibling-toggle sibling-toggle-left")
@@ -361,7 +397,7 @@
                 ? `M ${bx - 4},-4 L ${bx},0 L ${bx - 4},4`
                 : `M ${bx},-4 L ${bx - 4},0 L ${bx},4`;
             })
-            .style("display", d => hasSiblings(d) ? "block" : "none")
+            .style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
 
           const nodeUpdate = nodeEnter.merge(node);
@@ -373,7 +409,7 @@
           nodeUpdate.select(".descendant-toggle").style("display", d => hasDescendants(d) ? "block" : "none")
             .attr("d", d => d._children ? "M -4,66 L 0,70 L 4,66" : "M -4,70 L 0,66 L 4,70");
 
-          nodeUpdate.select(".sibling-toggle-right").style("display", d => hasSiblings(d) ? "block" : "none")
+          nodeUpdate.select(".sibling-toggle-right").style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none")
             .attr("d", d => {
               const bx = getSiblingArrowX(d, 1);
               return d.siblingsExpanded
@@ -381,7 +417,7 @@
                 : `M ${bx},-4 L ${bx + 4},0 L ${bx},4`;
             });
 
-          nodeUpdate.select(".sibling-toggle-left").style("display", d => hasSiblings(d) ? "block" : "none")
+          nodeUpdate.select(".sibling-toggle-left").style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none")
             .attr("d", d => {
               const bx = getSiblingArrowX(d, -1);
               return d.siblingsExpanded
