@@ -70,8 +70,16 @@
       stroke-linejoin: round;
     }
 
+    .sibling-link {
+      fill: none;
+      stroke: #9aa3a6;
+      stroke-width: 1.8px;
+      stroke-dasharray: 5 5;
+      stroke-linecap: round;
+    }
+
     .person-card {
-      cursor: pointer;
+      cursor: default;
     }
 
     .person-box {
@@ -113,6 +121,7 @@
       fill: #ffffff;
       stroke: #0b86a8;
       stroke-width: 2px;
+      cursor: pointer;
     }
 
     .toggle-text {
@@ -120,6 +129,18 @@
       font-size: 16px;
       font-weight: bold;
       dominant-baseline: middle;
+      cursor: pointer;
+      pointer-events: none;
+    }
+
+    .sibling-card {
+      opacity: 0.96;
+    }
+
+    .sibling-label {
+      font-size: 10px;
+      fill: #6b7280;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -158,10 +179,11 @@
 
     const cardWidth = 155;
     const cardHeight = 106;
-    const coupleGap = 10;
-    const levelGap = 175;
+    const coupleGap = 18;
+    const levelGap = 190;
+    const siblingGap = 190;
 
-    const treeLayout = d3.tree().nodeSize([250, levelGap]);
+    const treeLayout = d3.tree().nodeSize([360, levelGap]);
 
     function hasSpouse(d) {
       return d.data.spouse && typeof d.data.spouse === "object";
@@ -185,6 +207,10 @@
 
     function hasDescendants(d) {
       return d.data.descendants && d.data.descendants.length > 0;
+    }
+
+    function hasSiblings(d) {
+      return d.data.siblings && d.data.siblings.length > 0;
     }
 
     function wrapText(textSelection, maxWidth) {
@@ -223,8 +249,9 @@
       });
     }
 
-    function drawPersonCard(group, person, xOffset) {
+    function drawPersonCard(group, person, xOffset, extraClass = "") {
       const card = group.append("g")
+        .attr("class", extraClass)
         .attr("transform", `translate(${xOffset},0)`);
 
       card.append("rect")
@@ -248,6 +275,38 @@
         .attr("x", 0)
         .attr("y", 30)
         .text(person.years || "");
+
+      return card;
+    }
+
+    function drawSiblingGroup(group, d) {
+      if (!d.siblingsExpanded || !hasSiblings(d)) return;
+
+      const startX = groupWidth(d) / 2 + siblingGap;
+
+      d.data.siblings.forEach((sibling, index) => {
+        const yOffset = index * 125;
+        const xOffset = startX;
+
+        group.append("path")
+          .attr("class", "sibling-link")
+          .attr("d", `
+            M ${groupWidth(d) / 2},0
+            C ${groupWidth(d) / 2 + 45},0
+              ${xOffset - 90},${yOffset}
+              ${xOffset - cardWidth / 2},${yOffset}
+          `);
+
+        const siblingCard = drawPersonCard(group, sibling, xOffset, "sibling-card")
+          .attr("transform", `translate(${xOffset},${yOffset})`);
+
+        siblingCard.append("text")
+          .attr("class", "sibling-label")
+          .attr("text-anchor", "middle")
+          .attr("x", 0)
+          .attr("y", cardHeight / 2 + 16)
+          .text("Hermano/a");
+      });
     }
 
     fetch("family.json")
@@ -264,7 +323,7 @@
 
         svg.call(
           zoom.transform,
-          d3.zoomIdentity.translate(width / 2, 30).scale(0.9)
+          d3.zoomIdentity.translate(width / 2, 30).scale(0.75)
         );
 
         document.getElementById("expandAll").addEventListener("click", () => {
@@ -274,6 +333,7 @@
 
         document.getElementById("collapseAll").addEventListener("click", () => {
           collapseAll(root);
+          closeAllSiblings(root);
           update(root);
         });
 
@@ -302,6 +362,13 @@
             d._children = d.children;
             d.children = null;
           }
+        }
+
+        function closeAllSiblings(d) {
+          d.siblingsExpanded = false;
+
+          if (d.children) d.children.forEach(closeAllSiblings);
+          if (d._children) d._children.forEach(closeAllSiblings);
         }
 
         function toggleAncestors(d) {
@@ -355,6 +422,8 @@
           const node = g.selectAll(".person-card")
             .data(nodes, d => d.data.name);
 
+          node.exit().remove();
+
           const nodeEnter = node.enter()
             .append("g")
             .attr("class", "person-card")
@@ -399,12 +468,7 @@
             .attr("x", 0)
             .attr("y", -cardHeight / 2 - 11)
             .style("display", d => hasAncestors(d) ? "block" : "none")
-            .text(d => d._children ? "+" : d.children ? "−" : "")
-            .on("click", (event, d) => {
-              event.stopPropagation();
-              toggleAncestors(d);
-              update(d);
-            });
+            .text(d => d._children ? "+" : d.children ? "−" : "");
 
           nodeEnter.append("circle")
             .attr("class", "toggle-circle descendant-toggle")
@@ -421,7 +485,29 @@
             .style("display", d => hasDescendants(d) ? "block" : "none")
             .text("+");
 
+          nodeEnter.append("circle")
+            .attr("class", "toggle-circle sibling-toggle")
+            .attr("cx", d => groupWidth(d) / 2 + 18)
+            .attr("cy", 0)
+            .attr("r", 13)
+            .style("display", d => hasSiblings(d) ? "block" : "none")
+            .on("click", (event, d) => {
+              event.stopPropagation();
+              d.siblingsExpanded = !d.siblingsExpanded;
+              update(d);
+            });
+
+          nodeEnter.append("text")
+            .attr("class", "toggle-text sibling-toggle-text")
+            .attr("text-anchor", "middle")
+            .attr("x", d => groupWidth(d) / 2 + 18)
+            .attr("y", 1)
+            .style("display", d => hasSiblings(d) ? "block" : "none")
+            .text(d => d.siblingsExpanded ? "−" : "+");
+
           const nodeUpdate = nodeEnter.merge(node);
+
+          nodeUpdate.selectAll(".dynamic-sibling").remove();
 
           nodeUpdate.transition()
             .duration(300)
@@ -440,7 +526,25 @@
           nodeUpdate.select(".descendant-toggle-text")
             .style("display", d => hasDescendants(d) ? "block" : "none");
 
-          node.exit().remove();
+          nodeUpdate.select(".sibling-toggle")
+            .style("display", d => hasSiblings(d) ? "block" : "none");
+
+          nodeUpdate.select(".sibling-toggle-text")
+            .style("display", d => hasSiblings(d) ? "block" : "none")
+            .text(d => d.siblingsExpanded ? "−" : "+");
+
+          nodeUpdate.each(function(d) {
+            const group = d3.select(this);
+
+            group.selectAll(".sibling-render").remove();
+
+            if (d.siblingsExpanded && hasSiblings(d)) {
+              const siblingLayer = group.append("g")
+                .attr("class", "sibling-render");
+
+              drawSiblingGroup(siblingLayer, d);
+            }
+          });
 
           nodes.forEach(d => {
             d.x0 = d.x;
