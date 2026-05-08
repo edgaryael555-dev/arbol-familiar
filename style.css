@@ -63,10 +63,8 @@ header h1 { margin: 0; font-size: 20px; font-weight: 700; }
 .person-name { font-size: 13px; font-weight: 700; fill: #111827; }
 .person-info { font-size: 11px; fill: #4b5563; }
 .heart { font-size: 17px; fill: #d9467a; }
-.toggle-hit { fill: transparent; cursor: pointer; }
-.toggle-arrow { fill: none; stroke: var(--primary); stroke-width: 1.8px; stroke-linecap: round; stroke-linejoin: round; cursor: pointer; opacity: 0.85; }
+.toggle-arrow { fill: none; stroke: #6b8a96; stroke-width: 1.4px; stroke-linecap: round; stroke-linejoin: round; cursor: pointer; opacity: 0.75; }
 .sibling-card { opacity: 0.96; }
-.sibling-label { font-size: 10px; fill: var(--muted); font-weight: 600; }
 
 .person-card.highlight .person-box {
   stroke: #f59e0b;

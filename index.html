@@ -46,10 +46,9 @@
     const cardHeight = 106;
     const coupleGap = 18;
     const levelGap = 190;
+    // Nota para merges: usamos layout lateral simple (una fila) para evitar empalmes.
     const siblingGap = 150;
-    const siblingRowGap = 152;
-    const siblingColumnGap = 360;
-    const siblingColumns = 3;
+    const siblingColumnGap = 340;
 
     const treeLayout = d3.tree().nodeSize([360, levelGap]);
 
@@ -190,10 +189,8 @@
       const startX = primaryCenterX + siblingGap;
 
       d.data.siblings.forEach((sibling, index) => {
-        const column = index % siblingColumns;
-        const row = Math.floor(index / siblingColumns);
-        const yOffset = row * siblingRowGap;
-        const xOffset = startX + column * siblingColumnGap;
+        const yOffset = 0;
+        const xOffset = startX + index * siblingColumnGap;
 
         group.append("path")
           .attr("class", "sibling-link")
@@ -206,12 +203,6 @@
 
         const siblingGroup = drawCoupleOrSingle(group, sibling, xOffset, yOffset, "sibling-card");
 
-        siblingGroup.append("text")
-          .attr("class", "sibling-label")
-          .attr("text-anchor", "middle")
-          .attr("x", 0)
-          .attr("y", cardHeight / 2 + 16)
-          .text("Hermano/a");
       });
     }
 
@@ -326,41 +317,23 @@
 
           nodeEnter.each(function(d) { drawCoupleOrSingle(d3.select(this), d.data); });
 
-          nodeEnter.append("rect").attr("class", "toggle-hit ancestor-toggle")
-            .attr("x", -10).attr("y", -cardHeight / 2 - 20).attr("width", 20).attr("height", 16)
+          nodeEnter.append("path").attr("class", "toggle-arrow ancestor-toggle")
+            .attr("d", d => d._children ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52")
             .style("display", d => hasAncestors(d) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
 
-          nodeEnter.append("path").attr("class", "toggle-arrow ancestor-toggle-text")
-            .attr("d", d => d._children ? "M -5,-58 L 0,-52 L 5,-58" : "M -5,-52 L 0,-58 L 5,-52")
-            .style("display", d => hasAncestors(d) ? "block" : "none")
-            .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
-
-          nodeEnter.append("rect").attr("class", "toggle-hit descendant-toggle")
-            .attr("x", -10).attr("y", cardHeight / 2 + 4).attr("width", 20).attr("height", 16)
+          nodeEnter.append("path").attr("class", "toggle-arrow descendant-toggle")
+            .attr("d", d => d._children ? "M -4,66 L 0,70 L 4,66" : "M -4,70 L 0,66 L 4,70")
             .style("display", d => hasDescendants(d) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
 
-          nodeEnter.append("path").attr("class", "toggle-arrow descendant-toggle-text")
-            .attr("d", d => d._children ? "M -5,64 L 0,70 L 5,64" : "M -5,70 L 0,64 L 5,70")
-            .style("display", d => hasDescendants(d) ? "block" : "none")
-            .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
-
-          nodeEnter.append("rect").attr("class", "toggle-hit sibling-toggle")
-            .attr("x", d => {
-              const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
-              return primaryCenterX + cardWidth / 2 + 8;
-            }).attr("y", -8).attr("width", 16).attr("height", 16)
-            .style("display", d => hasSiblings(d) ? "block" : "none")
-            .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
-
-          nodeEnter.append("path").attr("class", "toggle-arrow sibling-toggle-text")
+          nodeEnter.append("path").attr("class", "toggle-arrow sibling-toggle")
             .attr("d", d => {
               const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
-              const bx = primaryCenterX + cardWidth / 2 + 8;
+              const bx = primaryCenterX + cardWidth / 2 + 6;
               return d.siblingsExpanded
-                ? `M ${bx + 10},-4 L ${bx + 4},0 L ${bx + 10},4`
-                : `M ${bx + 4},-4 L ${bx + 10},0 L ${bx + 4},4`;
+                ? `M ${bx + 4},-4 L ${bx},0 L ${bx + 4},4`
+                : `M ${bx},-4 L ${bx + 4},0 L ${bx},4`;
             })
             .style("display", d => hasSiblings(d) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
@@ -368,22 +341,19 @@
           const nodeUpdate = nodeEnter.merge(node);
           nodeUpdate.transition().duration(300).attr("transform", d => `translate(${d.x},${d.y})`);
 
-          nodeUpdate.select(".ancestor-toggle").style("display", d => hasAncestors(d) ? "block" : "none");
-          nodeUpdate.select(".ancestor-toggle-text").style("display", d => hasAncestors(d) ? "block" : "none")
-            .attr("d", d => d._children ? "M -5,-58 L 0,-52 L 5,-58" : "M -5,-52 L 0,-58 L 5,-52");
+          nodeUpdate.select(".ancestor-toggle").style("display", d => hasAncestors(d) ? "block" : "none")
+            .attr("d", d => d._children ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52");
 
-          nodeUpdate.select(".descendant-toggle").style("display", d => hasDescendants(d) ? "block" : "none");
-          nodeUpdate.select(".descendant-toggle-text").style("display", d => hasDescendants(d) ? "block" : "none")
-            .attr("d", d => d._children ? "M -5,64 L 0,70 L 5,64" : "M -5,70 L 0,64 L 5,70");
+          nodeUpdate.select(".descendant-toggle").style("display", d => hasDescendants(d) ? "block" : "none")
+            .attr("d", d => d._children ? "M -4,66 L 0,70 L 4,66" : "M -4,70 L 0,66 L 4,70");
 
-          nodeUpdate.select(".sibling-toggle").style("display", d => hasSiblings(d) ? "block" : "none");
-          nodeUpdate.select(".sibling-toggle-text").style("display", d => hasSiblings(d) ? "block" : "none")
+          nodeUpdate.select(".sibling-toggle").style("display", d => hasSiblings(d) ? "block" : "none")
             .attr("d", d => {
               const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
-              const bx = primaryCenterX + cardWidth / 2 + 8;
+              const bx = primaryCenterX + cardWidth / 2 + 6;
               return d.siblingsExpanded
-                ? `M ${bx + 10},-4 L ${bx + 4},0 L ${bx + 10},4`
-                : `M ${bx + 4},-4 L ${bx + 10},0 L ${bx + 4},4`;
+                ? `M ${bx + 4},-4 L ${bx},0 L ${bx + 4},4`
+                : `M ${bx},-4 L ${bx + 4},0 L ${bx},4`;
             });
 
           nodeUpdate.each(function(d) {
