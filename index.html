@@ -80,11 +80,11 @@
     }
 
     function hasAncestors(d) {
-      return d.children || d._children;
+      return Boolean(d.children || d._children);
     }
 
-    function hasDescendants(d) {
-      return Boolean(d.parent);
+    function hasFamilyChildren(d) {
+      return Boolean(d.children || d._children);
     }
 
     function hasSiblings(d) {
@@ -289,14 +289,36 @@
           if (d._children) d._children.forEach(closeAllSiblings);
         }
 
+        function collapseAncestorsFrom(d) {
+          if (!d.children) return;
+          d.children.forEach(collapseAll);
+          d._children = d.children;
+          d.children = null;
+        }
+
         function toggleAncestors(d) {
           if (d.children) {
-            d._children = d.children;
-            d.children = null;
+            collapseAncestorsFrom(d);
           } else if (d._children) {
             d.children = d._children;
             d._children = null;
           }
+        }
+
+        function toggleChildren(d) {
+          toggleAncestors(d);
+        }
+
+        function upArrowPath(isOpen, yClosed, yOpen) {
+          return isOpen
+            ? `M -4,${yOpen} L 0,${yOpen + 4} L 4,${yOpen}`
+            : `M -4,${yClosed} L 0,${yClosed - 4} L 4,${yClosed}`;
+        }
+
+        function downArrowPath(isOpen, yClosed, yOpen) {
+          return isOpen
+            ? `M -4,${yOpen} L 0,${yOpen - 4} L 4,${yOpen}`
+            : `M -4,${yClosed} L 0,${yClosed + 4} L 4,${yClosed}`;
         }
 
         function update(source) {
@@ -334,15 +356,22 @@
 
           nodeEnter.each(function(d) { drawCoupleOrSingle(d3.select(this), d.data); });
 
-          nodeEnter.append("path").attr("class", "toggle-arrow ancestor-toggle")
-            .attr("d", d => d._children ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52")
+          nodeEnter.append("path").attr("class", "toggle-arrow ancestor-toggle-left")
+            .attr("transform", d => `translate(${hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0},0)`)
+            .attr("d", d => upArrowPath(Boolean(d.children), -52, -56))
             .style("display", d => hasAncestors(d) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
 
-          nodeEnter.append("path").attr("class", "toggle-arrow descendant-toggle")
-            .attr("d", d => d._children ? "M -4,66 L 0,70 L 4,66" : "M -4,70 L 0,66 L 4,70")
-            .style("display", d => hasDescendants(d) ? "block" : "none")
+          nodeEnter.append("path").attr("class", "toggle-arrow ancestor-toggle-right")
+            .attr("transform", d => `translate(${hasSpouse(d) ? (cardWidth / 2 + coupleGap / 2) : 0},0)`)
+            .attr("d", d => upArrowPath(Boolean(d.children), -52, -56))
+            .style("display", d => hasSpouse(d) && hasAncestors(d) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
+
+          nodeEnter.append("path").attr("class", "toggle-arrow descendant-toggle")
+            .attr("d", d => downArrowPath(Boolean(d.children), 66, 70))
+            .style("display", d => hasFamilyChildren(d) ? "block" : "none")
+            .on("click", (event, d) => { event.stopPropagation(); toggleChildren(d); update(d); });
 
           nodeEnter.append("path").attr("class", "toggle-arrow sibling-toggle sibling-toggle-right")
             .attr("d", d => {
@@ -367,11 +396,18 @@
           const nodeUpdate = nodeEnter.merge(node);
           nodeUpdate.transition().duration(300).attr("transform", d => `translate(${d.x},${d.y})`);
 
-          nodeUpdate.select(".ancestor-toggle").style("display", d => hasAncestors(d) ? "block" : "none")
-            .attr("d", d => d._children ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52");
+          nodeUpdate.select(".ancestor-toggle-left")
+            .attr("transform", d => `translate(${hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0},0)`)
+            .style("display", d => hasAncestors(d) ? "block" : "none")
+            .attr("d", d => upArrowPath(Boolean(d.children), -52, -56));
 
-          nodeUpdate.select(".descendant-toggle").style("display", d => hasDescendants(d) ? "block" : "none")
-            .attr("d", d => d._children ? "M -4,66 L 0,70 L 4,66" : "M -4,70 L 0,66 L 4,70");
+          nodeUpdate.select(".ancestor-toggle-right")
+            .attr("transform", d => `translate(${hasSpouse(d) ? (cardWidth / 2 + coupleGap / 2) : 0},0)`)
+            .style("display", d => hasSpouse(d) && hasAncestors(d) ? "block" : "none")
+            .attr("d", d => upArrowPath(Boolean(d.children), -52, -56));
+
+          nodeUpdate.select(".descendant-toggle").style("display", d => hasFamilyChildren(d) ? "block" : "none")
+            .attr("d", d => downArrowPath(Boolean(d.children), 66, 70));
 
           nodeUpdate.select(".sibling-toggle-right").style("display", d => hasSiblings(d) ? "block" : "none")
             .attr("d", d => {
