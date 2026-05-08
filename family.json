@@ -10,7 +10,20 @@
       "name": "Juan Pablo Miranda Guillermo",
       "years": "1971–Vivo",
       "gender": "Hombre",
-      "spouse": { "name": "María del Rocio Islas Peralta", "years": "1973–Viva", "gender": "Mujer" },
+      "spouse": {
+        "name": "María del Rocio Islas Peralta",
+        "years": "1973–Viva",
+        "gender": "Mujer",
+        "siblings": [
+          { "name": "Jose Humberto Roman Islas Peralta", "years": "Vivo", "gender": "Hombre", "spouse": { "name": "Ethel Patricia Villagómez Aragón", "years": "Viva", "gender": "Mujer" } },
+          { "name": "Noé Teodóro Islas Peralta", "years": "Vivo", "gender": "Hombre" },
+          { "name": "Lucia Emma Islas Peralta", "years": "Viva", "gender": "Mujer", "spouse": { "name": "Ambrocio Godínez Gonzáles", "years": "Vivo", "gender": "Hombre" } },
+          { "name": "Jose Islas Peralta", "years": "Vivo", "gender": "Hombre" },
+          { "name": "Jose Román Emiliano Islas Peralta", "years": "Vivo", "gender": "Hombre" },
+          { "name": "María Guadalupe Islas Peralta", "years": "Viva", "gender": "Mujer", "spouse": { "name": "Abraham Méndez Villagómez", "years": "Vivo", "gender": "Hombre" } },
+          { "name": "Jose Benito Roberto Islas Peralta", "years": "Vivo", "gender": "Hombre" }
+        ]
+      },
       "siblings": [
         {
           "name": "Magdalena Miranda Guillermo",
