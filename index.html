@@ -130,7 +130,6 @@
       font-weight: bold;
       dominant-baseline: middle;
       cursor: pointer;
-      pointer-events: none;
     }
 
     .sibling-card {
@@ -181,7 +180,7 @@
     const cardHeight = 106;
     const coupleGap = 18;
     const levelGap = 190;
-    const siblingGap = 190;
+    const siblingGap = 185;
 
     const treeLayout = d3.tree().nodeSize([360, levelGap]);
 
@@ -206,11 +205,11 @@
     }
 
     function hasDescendants(d) {
-      return d.data.descendants && d.data.descendants.length > 0;
+      return Array.isArray(d.data.descendants) && d.data.descendants.length > 0;
     }
 
     function hasSiblings(d) {
-      return d.data.siblings && d.data.siblings.length > 0;
+      return Array.isArray(d.data.siblings) && d.data.siblings.length > 0;
     }
 
     function wrapText(textSelection, maxWidth) {
@@ -249,10 +248,10 @@
       });
     }
 
-    function drawPersonCard(group, person, xOffset, extraClass = "") {
+    function drawPersonCard(group, person, xOffset, yOffset = 0, extraClass = "") {
       const card = group.append("g")
         .attr("class", extraClass)
-        .attr("transform", `translate(${xOffset},0)`);
+        .attr("transform", `translate(${xOffset},${yOffset})`);
 
       card.append("rect")
         .attr("class", personClass(person))
@@ -279,28 +278,59 @@
       return card;
     }
 
+    function drawCoupleOrSingle(group, personData, d, xOffset = 0, yOffset = 0, extraClass = "") {
+      const wrapper = group.append("g")
+        .attr("class", extraClass)
+        .attr("transform", `translate(${xOffset},${yOffset})`);
+
+      if (personData.spouse && typeof personData.spouse === "object") {
+        const leftX = -(cardWidth / 2 + coupleGap / 2);
+        const rightX = cardWidth / 2 + coupleGap / 2;
+
+        drawPersonCard(wrapper, personData, leftX, 0);
+        drawPersonCard(wrapper, personData.spouse, rightX, 0);
+
+        wrapper.append("text")
+          .attr("class", "heart")
+          .attr("text-anchor", "middle")
+          .attr("x", 0)
+          .attr("y", 6)
+          .text("♥");
+      } else {
+        drawPersonCard(wrapper, personData, 0, 0);
+      }
+
+      return wrapper;
+    }
+
     function drawSiblingGroup(group, d) {
       if (!d.siblingsExpanded || !hasSiblings(d)) return;
 
       const startX = groupWidth(d) / 2 + siblingGap;
 
       d.data.siblings.forEach((sibling, index) => {
-        const yOffset = index * 125;
+        const yOffset = index * 132;
         const xOffset = startX;
 
         group.append("path")
           .attr("class", "sibling-link")
           .attr("d", `
             M ${groupWidth(d) / 2},0
-            C ${groupWidth(d) / 2 + 45},0
-              ${xOffset - 90},${yOffset}
+            C ${groupWidth(d) / 2 + 40},0
+              ${xOffset - 95},${yOffset}
               ${xOffset - cardWidth / 2},${yOffset}
           `);
 
-        const siblingCard = drawPersonCard(group, sibling, xOffset, "sibling-card")
-          .attr("transform", `translate(${xOffset},${yOffset})`);
+        const siblingGroup = drawCoupleOrSingle(
+          group,
+          sibling,
+          null,
+          xOffset,
+          yOffset,
+          "sibling-card"
+        );
 
-        siblingCard.append("text")
+        siblingGroup.append("text")
           .attr("class", "sibling-label")
           .attr("text-anchor", "middle")
           .attr("x", 0)
@@ -431,23 +461,7 @@
 
           nodeEnter.each(function(d) {
             const group = d3.select(this);
-
-            if (hasSpouse(d)) {
-              const leftX = -(cardWidth / 2 + coupleGap / 2);
-              const rightX = cardWidth / 2 + coupleGap / 2;
-
-              drawPersonCard(group, d.data, leftX);
-              drawPersonCard(group, d.data.spouse, rightX);
-
-              group.append("text")
-                .attr("class", "heart")
-                .attr("text-anchor", "middle")
-                .attr("x", 0)
-                .attr("y", 6)
-                .text("♥");
-            } else {
-              drawPersonCard(group, d.data, 0);
-            }
+            drawCoupleOrSingle(group, d.data, d);
           });
 
           nodeEnter.append("circle")
@@ -468,7 +482,12 @@
             .attr("x", 0)
             .attr("y", -cardHeight / 2 - 11)
             .style("display", d => hasAncestors(d) ? "block" : "none")
-            .text(d => d._children ? "+" : d.children ? "−" : "");
+            .text(d => d._children ? "+" : d.children ? "−" : "")
+            .on("click", (event, d) => {
+              event.stopPropagation();
+              toggleAncestors(d);
+              update(d);
+            });
 
           nodeEnter.append("circle")
             .attr("class", "toggle-circle descendant-toggle")
@@ -503,11 +522,14 @@
             .attr("x", d => groupWidth(d) / 2 + 18)
             .attr("y", 1)
             .style("display", d => hasSiblings(d) ? "block" : "none")
-            .text(d => d.siblingsExpanded ? "−" : "+");
+            .text(d => d.siblingsExpanded ? "−" : "+")
+            .on("click", (event, d) => {
+              event.stopPropagation();
+              d.siblingsExpanded = !d.siblingsExpanded;
+              update(d);
+            });
 
           const nodeUpdate = nodeEnter.merge(node);
-
-          nodeUpdate.selectAll(".dynamic-sibling").remove();
 
           nodeUpdate.transition()
             .duration(300)
