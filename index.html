@@ -97,7 +97,7 @@
     const treeLayout = d3.tree().nodeSize([180, 130]);
 
     const cardWidth = 150;
-    const cardHeight = 62;
+    const cardHeight = 82;
 
     fetch("family.json")
       .then(response => response.json())
@@ -174,13 +174,13 @@
           nodeEnter.append("text")
             .attr("class", "person-info")
             .attr("text-anchor", "middle")
-            .attr("y", 12)
-            .text(d => d.data.years || "");
+            .attr("y", 28)
+            .text(d => d.data.spouse ? "Pareja: " + d.data.spouse : "");
 
           nodeEnter.append("text")
             .attr("class", "toggle")
             .attr("text-anchor", "middle")
-            .attr("y", 30)
+            .attr("y", 43)
             .text(d => d._children ? "+" : d.children ? "−" : "");
 
           const nodeUpdate = nodeEnter.merge(node);
