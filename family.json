@@ -118,51 +118,6 @@
                       }
                     }
                   ]
-                },
-                {
-                  "name": "Teodoro Peralta Rojas",
-                  "years": "Vivo",
-                  "gender": "Hombre",
-                  "spouse": {
-                    "name": "Amparo",
-                    "years": "Fallecida",
-                    "gender": "Mujer"
-                  }
-                },
-                {
-                  "name": "Ricardo Peralta Rojas",
-                  "years": "Fallecido",
-                  "gender": "Hombre",
-                  "spouse": {
-                    "name": "Catalina Torres",
-                    "years": "Fallecida",
-                    "gender": "Mujer"
-                  }
-                },
-                {
-                  "name": "Jesus Peralta Rojas",
-                  "years": "Vivo",
-                  "gender": "Hombre",
-                  "spouse": {
-                    "name": "María Elena Sánchez",
-                    "years": "Viva",
-                    "gender": "Mujer"
-                  }
-                },
-                {
-                  "name": "Federico Peralta Rojas",
-                  "years": "Vivo",
-                  "gender": "Hombre",
-                  "spouse": {
-                    "name": "Graciela Gudiño",
-                    "years": "Viva",
-                    "gender": "Mujer"
-                  }
-                },
-                {
-                  "name": "Jose Trinidad Peralta Rojas",
-                  "years": "1936–Fallecido",
-                  "gender": "Hombre"
                 }
               ]
             }
