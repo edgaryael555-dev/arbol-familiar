@@ -5,36 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Árbol Familiar</title>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f1ec;
-      color: #2c2c2c;
+      background: #eef0ef;
+      color: #1f2933;
     }
 
     header {
-      padding: 18px 28px;
+      height: 64px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
       background: #ffffff;
-      border-bottom: 1px solid #ddd;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border-bottom: 1px solid #d8d8d8;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      position: relative;
+      z-index: 2;
     }
 
     header h1 {
       margin: 0;
-      font-size: 24px;
+      font-size: 22px;
+      font-weight: 700;
     }
 
     #tree-container {
       width: 100vw;
-      height: calc(100vh - 70px);
+      height: calc(100vh - 64px);
       overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 35%),
+        #eef0ef;
     }
 
     .link {
       fill: none;
-      stroke: #b8aa96;
+      stroke: #8f9699;
       stroke-width: 2px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .person-card {
@@ -43,28 +55,50 @@
 
     .person-box {
       fill: #ffffff;
-      stroke: #b8aa96;
+      stroke: #d2d8da;
       stroke-width: 1.5px;
-      rx: 14;
-      ry: 14;
-      filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.14));
+      rx: 16;
+      ry: 16;
+      filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.14));
+    }
+
+    .person-box.male {
+      stroke: #2bb6d6;
+      stroke-width: 2px;
+    }
+
+    .person-box.female {
+      stroke: #e64b86;
+      stroke-width: 2px;
     }
 
     .person-name {
       font-size: 14px;
       font-weight: 700;
-      fill: #2d2d2d;
+      fill: #111827;
     }
 
     .person-info {
       font-size: 11px;
-      fill: #6b6258;
+      fill: #4b5563;
     }
 
-    .toggle {
-      fill: #7a6a58;
-      font-size: 16px;
+    .person-spouse {
+      font-size: 10px;
+      fill: #6b7280;
+    }
+
+    .toggle-circle {
+      fill: #ffffff;
+      stroke: #0b86a8;
+      stroke-width: 2px;
+    }
+
+    .toggle-text {
+      fill: #0b86a8;
+      font-size: 18px;
       font-weight: bold;
+      dominant-baseline: middle;
     }
   </style>
 </head>
@@ -80,7 +114,7 @@
 
   <script>
     const width = window.innerWidth;
-    const height = window.innerHeight - 70;
+    const height = window.innerHeight - 64;
 
     const svg = d3.select("svg")
       .attr("width", width)
@@ -88,16 +122,60 @@
 
     const g = svg.append("g");
 
-    svg.call(
-      d3.zoom().on("zoom", (event) => {
+    const zoom = d3.zoom()
+      .scaleExtent([0.25, 2.5])
+      .on("zoom", (event) => {
         g.attr("transform", event.transform);
-      })
-    );
+      });
 
-    const treeLayout = d3.tree().nodeSize([180, 130]);
+    svg.call(zoom);
 
-    const cardWidth = 150;
-    const cardHeight = 82;
+    const treeLayout = d3.tree().nodeSize([210, 230]);
+
+    const cardWidth = 170;
+    const cardHeight = 118;
+
+    function wrapText(textSelection, width) {
+      textSelection.each(function() {
+        const text = d3.select(this);
+        const words = text.text().split(/\s+/).reverse();
+        let word;
+        let line = [];
+        let lineNumber = 0;
+        const lineHeight = 15;
+        const y = text.attr("y");
+        const x = text.attr("x") || 0;
+
+        text.text(null);
+
+        let tspan = text.append("tspan")
+          .attr("x", x)
+          .attr("y", y);
+
+        while (word = words.pop()) {
+          line.push(word);
+          tspan.text(line.join(" "));
+
+          if (tspan.node().getComputedTextLength() > width && line.length > 1) {
+            line.pop();
+            tspan.text(line.join(" "));
+            line = [word];
+
+            tspan = text.append("tspan")
+              .attr("x", x)
+              .attr("y", y)
+              .attr("dy", `${++lineNumber * lineHeight}px`)
+              .text(word);
+          }
+        }
+      });
+    }
+
+    function cardClassByGender(d) {
+      if (d.data.gender === "Hombre") return "person-box male";
+      if (d.data.gender === "Mujer") return "person-box female";
+      return "person-box";
+    }
 
     fetch("family.json")
       .then(response => response.json())
@@ -107,8 +185,14 @@
         root.x0 = height / 2;
         root.y0 = 0;
 
-        root.children?.forEach(collapse);
+        if (root.children) root.children.forEach(collapse);
+
         update(root);
+
+        svg.call(
+          zoom.transform,
+          d3.zoomIdentity.translate(80, height / 2).scale(0.8)
+        );
 
         function collapse(d) {
           if (d.children) {
@@ -124,7 +208,7 @@
           const nodes = root.descendants();
           const links = root.links();
 
-          nodes.forEach(d => d.y = d.depth * 210);
+          nodes.forEach(d => d.y = d.depth * 240);
 
           const link = g.selectAll(".link")
             .data(links, d => d.target.data.name);
@@ -133,6 +217,8 @@
             .append("path")
             .attr("class", "link")
             .merge(link)
+            .transition()
+            .duration(300)
             .attr("d", d3.linkHorizontal()
               .x(d => d.y)
               .y(d => d.x)
@@ -146,12 +232,12 @@
           const nodeEnter = node.enter()
             .append("g")
             .attr("class", "person-card")
-            .attr("transform", d => `translate(${d.y},${d.x})`)
+            .attr("transform", d => `translate(${source.y0 || 0},${source.x0 || 0})`)
             .on("click", (event, d) => {
               if (d.children) {
                 d._children = d.children;
                 d.children = null;
-              } else {
+              } else if (d._children) {
                 d.children = d._children;
                 d._children = null;
               }
@@ -159,7 +245,7 @@
             });
 
           nodeEnter.append("rect")
-            .attr("class", "person-box")
+            .attr("class", d => cardClassByGender(d))
             .attr("x", -cardWidth / 2)
             .attr("y", -cardHeight / 2)
             .attr("width", cardWidth)
@@ -168,40 +254,58 @@
           nodeEnter.append("text")
             .attr("class", "person-name")
             .attr("text-anchor", "middle")
-            .attr("y", -8)
-            .text(d => d.data.name);
+            .attr("x", 0)
+            .attr("y", -28)
+            .text(d => d.data.name)
+            .call(wrapText, 140);
 
           nodeEnter.append("text")
             .attr("class", "person-info")
             .attr("text-anchor", "middle")
-            .attr("y", 12)
+            .attr("x", 0)
+            .attr("y", 18)
             .text(d => d.data.years || "");
-          
-          nodeEnter.append("text")
-            .attr("class", "person-info")
-            .attr("text-anchor", "middle")
-            .attr("y", 28)
-            .text(d => d.data.spouse ? "Pareja: " + d.data.spouse : "");
 
           nodeEnter.append("text")
-            .attr("class", "toggle")
+            .attr("class", "person-spouse")
             .attr("text-anchor", "middle")
-            .attr("y", 43)
+            .attr("x", 0)
+            .attr("y", 36)
+            .text(d => d.data.spouse ? "Pareja: " + d.data.spouse : "")
+            .call(wrapText, 145);
+
+          nodeEnter.append("circle")
+            .attr("class", "toggle-circle")
+            .attr("cx", 0)
+            .attr("cy", cardHeight / 2 + 13)
+            .attr("r", 13)
+            .style("display", d => d.children || d._children ? "block" : "none");
+
+          nodeEnter.append("text")
+            .attr("class", "toggle-text")
+            .attr("text-anchor", "middle")
+            .attr("x", 0)
+            .attr("y", cardHeight / 2 + 14)
             .text(d => d._children ? "+" : d.children ? "−" : "");
 
           const nodeUpdate = nodeEnter.merge(node);
 
-          nodeUpdate
-            .transition()
+          nodeUpdate.transition()
             .duration(300)
             .attr("transform", d => `translate(${d.y},${d.x})`);
 
-          nodeUpdate.select(".toggle")
+          nodeUpdate.select(".toggle-text")
             .text(d => d._children ? "+" : d.children ? "−" : "");
+
+          nodeUpdate.select(".toggle-circle")
+            .style("display", d => d.children || d._children ? "block" : "none");
 
           node.exit().remove();
 
-          g.attr("transform", "translate(120,260)");
+          nodes.forEach(d => {
+            d.x0 = d.x;
+            d.y0 = d.y;
+          });
         }
       });
   </script>
