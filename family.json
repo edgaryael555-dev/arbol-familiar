@@ -1,13 +1,24 @@
 {
   "name": "Bisabuelo José",
+  "years": "1890–1965",
   "children": [
     {
       "name": "Abuelo Carlos",
+      "years": "1920–1998",
       "children": [
         {
-          "name": "Papá Luis"
+          "name": "Papá Luis",
+          "years": "1955–"
+        },
+        {
+          "name": "Tía Ana",
+          "years": "1958–"
         }
       ]
+    },
+    {
+      "name": "Tía Carmen",
+      "years": "1925–2001"
     }
   ]
 }
