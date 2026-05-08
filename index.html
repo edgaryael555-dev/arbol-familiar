@@ -5,143 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Árbol Familiar</title>
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #eef0ef;
-      color: #1f2933;
-    }
-
-    header {
-      height: 64px;
-      padding: 0 28px;
-      display: flex;
-      align-items: center;
-      background: #ffffff;
-      border-bottom: 1px solid #d8d8d8;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-      position: relative;
-      z-index: 2;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-      font-weight: 700;
-    }
-
-    .toolbar {
-      margin-left: auto;
-      display: flex;
-      gap: 10px;
-    }
-
-    .toolbar button {
-      border: 1px solid #d2d8da;
-      background: #ffffff;
-      color: #1f2933;
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .toolbar button:hover {
-      background: #f3f4f6;
-    }
-
-    #tree-container {
-      width: 100vw;
-      height: calc(100vh - 64px);
-      overflow: hidden;
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 35%),
-        #eef0ef;
-    }
-
-    .link {
-      fill: none;
-      stroke: #8f9699;
-      stroke-width: 2px;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .sibling-link {
-      fill: none;
-      stroke: #9aa3a6;
-      stroke-width: 1.8px;
-      stroke-dasharray: 5 5;
-      stroke-linecap: round;
-    }
-
-    .person-card {
-      cursor: default;
-    }
-
-    .person-box {
-      fill: #ffffff;
-      stroke: #d2d8da;
-      stroke-width: 1.5px;
-      rx: 16;
-      ry: 16;
-      filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.13));
-    }
-
-    .male {
-      stroke: #20b7d8;
-      stroke-width: 2.2px;
-    }
-
-    .female {
-      stroke: #f04487;
-      stroke-width: 2.2px;
-    }
-
-    .person-name {
-      font-size: 13px;
-      font-weight: 700;
-      fill: #111827;
-    }
-
-    .person-info {
-      font-size: 11px;
-      fill: #4b5563;
-    }
-
-    .heart {
-      font-size: 17px;
-      fill: #d9467a;
-    }
-
-    .toggle-circle {
-      fill: #ffffff;
-      stroke: #0b86a8;
-      stroke-width: 2px;
-      cursor: pointer;
-    }
-
-    .toggle-text {
-      fill: #0b86a8;
-      font-size: 16px;
-      font-weight: bold;
-      dominant-baseline: middle;
-      cursor: pointer;
-    }
-
-    .sibling-card {
-      opacity: 0.96;
-    }
-
-    .sibling-label {
-      font-size: 10px;
-      fill: #6b7280;
-      font-weight: 600;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -149,8 +13,10 @@
     <h1>Árbol Familiar</h1>
 
     <div class="toolbar">
+      <input id="searchPerson" type="search" placeholder="Buscar persona..." aria-label="Buscar persona" />
       <button id="expandAll">Expandir todo</button>
       <button id="collapseAll">Minimizar todo</button>
+      <button id="resetView">Centrar vista</button>
     </div>
   </header>
 
@@ -169,7 +35,7 @@
     const g = svg.append("g");
 
     const zoom = d3.zoom()
-      .scaleExtent([0.25, 2.5])
+      .scaleExtent([0.2, 3])
       .on("zoom", event => {
         g.attr("transform", event.transform);
       });
@@ -180,9 +46,21 @@
     const cardHeight = 106;
     const coupleGap = 18;
     const levelGap = 190;
-    const siblingGap = 185;
+    const siblingGap = 150;
+    const siblingColumnGap = 340;
 
     const treeLayout = d3.tree().nodeSize([360, levelGap]);
+
+    function normalizeTreeData(node) {
+      const normalized = { ...node };
+      const descendants = Array.isArray(node.descendants) ? node.descendants : [];
+      const children = Array.isArray(node.children) ? node.children : [];
+      normalized.children = [...children, ...descendants].map(normalizeTreeData);
+      if (Array.isArray(node.siblings)) {
+        normalized.siblings = node.siblings.map(sibling => normalizeTreeData({ ...sibling, children: sibling.children || sibling.descendants || [] }));
+      }
+      return normalized;
+    }
 
     function hasSpouse(d) {
       return d.data.spouse && typeof d.data.spouse === "object";
@@ -205,7 +83,7 @@
     }
 
     function hasDescendants(d) {
-      return Array.isArray(d.data.descendants) && d.data.descendants.length > 0;
+      return (d.children && d.children.length > 0) || (d._children && d._children.length > 0);
     }
 
     function hasSiblings(d) {
@@ -278,7 +156,7 @@
       return card;
     }
 
-    function drawCoupleOrSingle(group, personData, d, xOffset = 0, yOffset = 0, extraClass = "") {
+    function drawCoupleOrSingle(group, personData, xOffset = 0, yOffset = 0, extraClass = "") {
       const wrapper = group.append("g")
         .attr("class", extraClass)
         .attr("transform", `translate(${xOffset},${yOffset})`);
@@ -306,43 +184,31 @@
     function drawSiblingGroup(group, d) {
       if (!d.siblingsExpanded || !hasSiblings(d)) return;
 
-      const startX = groupWidth(d) / 2 + siblingGap;
+      const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
+      const startX = primaryCenterX + siblingGap;
 
       d.data.siblings.forEach((sibling, index) => {
-        const yOffset = index * 132;
-        const xOffset = startX;
+        const yOffset = 0;
+        const xOffset = startX + index * siblingColumnGap;
 
         group.append("path")
           .attr("class", "sibling-link")
           .attr("d", `
-            M ${groupWidth(d) / 2},0
-            C ${groupWidth(d) / 2 + 40},0
+            M ${primaryCenterX + cardWidth / 2},0
+            C ${primaryCenterX + cardWidth / 2 + 58},0
               ${xOffset - 95},${yOffset}
               ${xOffset - cardWidth / 2},${yOffset}
           `);
 
-        const siblingGroup = drawCoupleOrSingle(
-          group,
-          sibling,
-          null,
-          xOffset,
-          yOffset,
-          "sibling-card"
-        );
+        const siblingGroup = drawCoupleOrSingle(group, sibling, xOffset, yOffset, "sibling-card");
 
-        siblingGroup.append("text")
-          .attr("class", "sibling-label")
-          .attr("text-anchor", "middle")
-          .attr("x", 0)
-          .attr("y", cardHeight / 2 + 16)
-          .text("Hermano/a");
       });
     }
 
     fetch("family.json")
       .then(response => response.json())
-      .then(data => {
-        const root = d3.hierarchy(data);
+      .then(rawData => {
+        const root = d3.hierarchy(normalizeTreeData(rawData));
 
         root.x0 = width / 2;
         root.y0 = height - 130;
@@ -350,11 +216,13 @@
         if (root.children) root.children.forEach(collapse);
 
         update(root);
+        centerView();
 
-        svg.call(
-          zoom.transform,
-          d3.zoomIdentity.translate(width / 2, 30).scale(0.75)
-        );
+        function centerView() {
+          svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, 30).scale(0.75));
+        }
+
+        document.getElementById("resetView").addEventListener("click", centerView);
 
         document.getElementById("expandAll").addEventListener("click", () => {
           expandAll(root);
@@ -365,6 +233,11 @@
           collapseAll(root);
           closeAllSiblings(root);
           update(root);
+        });
+
+        document.getElementById("searchPerson").addEventListener("input", (event) => {
+          const query = event.target.value.trim().toLowerCase();
+          d3.selectAll(".person-card").classed("highlight", d => query && (d.data.name || "").toLowerCase().includes(query));
         });
 
         function collapse(d) {
@@ -381,9 +254,7 @@
             d._children = null;
           }
 
-          if (d.children) {
-            d.children.forEach(expandAll);
-          }
+          if (d.children) d.children.forEach(expandAll);
         }
 
         function collapseAll(d) {
@@ -396,7 +267,6 @@
 
         function closeAllSiblings(d) {
           d.siblingsExpanded = false;
-
           if (d.children) d.children.forEach(closeAllSiblings);
           if (d._children) d._children.forEach(closeAllSiblings);
         }
@@ -424,154 +294,76 @@
           const link = g.selectAll(".link")
             .data(links, d => d.target.data.name);
 
-          link.enter()
-            .append("path")
-            .attr("class", "link")
-            .merge(link)
-            .transition()
-            .duration(300)
+          link.enter().append("path").attr("class", "link").merge(link)
+            .transition().duration(300)
             .attr("d", d => {
               const sourceX = d.source.x;
               const sourceY = d.source.y - cardHeight / 2 - 22;
-
               const targetX = d.target.x;
               const targetY = d.target.y + cardHeight / 2 + 8;
-
               const midY = (sourceY + targetY) / 2;
-
-              return `
-                M ${sourceX},${sourceY}
-                C ${sourceX},${midY}
-                  ${targetX},${midY}
-                  ${targetX},${targetY}
-              `;
+              return `M ${sourceX},${sourceY} C ${sourceX},${midY} ${targetX},${midY} ${targetX},${targetY}`;
             });
 
           link.exit().remove();
 
-          const node = g.selectAll(".person-card")
-            .data(nodes, d => d.data.name);
-
+          const node = g.selectAll(".person-card").data(nodes, d => d.data.name);
           node.exit().remove();
 
-          const nodeEnter = node.enter()
-            .append("g")
+          const nodeEnter = node.enter().append("g")
             .attr("class", "person-card")
             .attr("transform", d => `translate(${source.x0 || 0},${source.y0 || 0})`);
 
-          nodeEnter.each(function(d) {
-            const group = d3.select(this);
-            drawCoupleOrSingle(group, d.data, d);
-          });
+          nodeEnter.each(function(d) { drawCoupleOrSingle(d3.select(this), d.data); });
 
-          nodeEnter.append("circle")
-            .attr("class", "toggle-circle ancestor-toggle")
-            .attr("cx", 0)
-            .attr("cy", -cardHeight / 2 - 12)
-            .attr("r", 13)
+          nodeEnter.append("path").attr("class", "toggle-arrow ancestor-toggle")
+            .attr("d", d => d._children ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52")
             .style("display", d => hasAncestors(d) ? "block" : "none")
-            .on("click", (event, d) => {
-              event.stopPropagation();
-              toggleAncestors(d);
-              update(d);
-            });
+            .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
 
-          nodeEnter.append("text")
-            .attr("class", "toggle-text ancestor-toggle-text")
-            .attr("text-anchor", "middle")
-            .attr("x", 0)
-            .attr("y", -cardHeight / 2 - 11)
-            .style("display", d => hasAncestors(d) ? "block" : "none")
-            .text(d => d._children ? "+" : d.children ? "−" : "")
-            .on("click", (event, d) => {
-              event.stopPropagation();
-              toggleAncestors(d);
-              update(d);
-            });
-
-          nodeEnter.append("circle")
-            .attr("class", "toggle-circle descendant-toggle")
-            .attr("cx", 0)
-            .attr("cy", cardHeight / 2 + 12)
-            .attr("r", 13)
-            .style("display", d => hasDescendants(d) ? "block" : "none");
-
-          nodeEnter.append("text")
-            .attr("class", "toggle-text descendant-toggle-text")
-            .attr("text-anchor", "middle")
-            .attr("x", 0)
-            .attr("y", cardHeight / 2 + 13)
+          nodeEnter.append("path").attr("class", "toggle-arrow descendant-toggle")
+            .attr("d", d => d._children ? "M -4,66 L 0,70 L 4,66" : "M -4,70 L 0,66 L 4,70")
             .style("display", d => hasDescendants(d) ? "block" : "none")
-            .text("+");
+            .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
 
-          nodeEnter.append("circle")
-            .attr("class", "toggle-circle sibling-toggle")
-            .attr("cx", d => groupWidth(d) / 2 + 18)
-            .attr("cy", 0)
-            .attr("r", 13)
+          nodeEnter.append("path").attr("class", "toggle-arrow sibling-toggle")
+            .attr("d", d => {
+              const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
+              const bx = primaryCenterX + cardWidth / 2 + 6;
+              return d.siblingsExpanded
+                ? `M ${bx + 4},-4 L ${bx},0 L ${bx + 4},4`
+                : `M ${bx},-4 L ${bx + 4},0 L ${bx},4`;
+            })
             .style("display", d => hasSiblings(d) ? "block" : "none")
-            .on("click", (event, d) => {
-              event.stopPropagation();
-              d.siblingsExpanded = !d.siblingsExpanded;
-              update(d);
-            });
-
-          nodeEnter.append("text")
-            .attr("class", "toggle-text sibling-toggle-text")
-            .attr("text-anchor", "middle")
-            .attr("x", d => groupWidth(d) / 2 + 18)
-            .attr("y", 1)
-            .style("display", d => hasSiblings(d) ? "block" : "none")
-            .text(d => d.siblingsExpanded ? "−" : "+")
-            .on("click", (event, d) => {
-              event.stopPropagation();
-              d.siblingsExpanded = !d.siblingsExpanded;
-              update(d);
-            });
+            .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
 
           const nodeUpdate = nodeEnter.merge(node);
+          nodeUpdate.transition().duration(300).attr("transform", d => `translate(${d.x},${d.y})`);
 
-          nodeUpdate.transition()
-            .duration(300)
-            .attr("transform", d => `translate(${d.x},${d.y})`);
+          nodeUpdate.select(".ancestor-toggle").style("display", d => hasAncestors(d) ? "block" : "none")
+            .attr("d", d => d._children ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52");
 
-          nodeUpdate.select(".ancestor-toggle")
-            .style("display", d => hasAncestors(d) ? "block" : "none");
+          nodeUpdate.select(".descendant-toggle").style("display", d => hasDescendants(d) ? "block" : "none")
+            .attr("d", d => d._children ? "M -4,66 L 0,70 L 4,66" : "M -4,70 L 0,66 L 4,70");
 
-          nodeUpdate.select(".ancestor-toggle-text")
-            .style("display", d => hasAncestors(d) ? "block" : "none")
-            .text(d => d._children ? "+" : d.children ? "−" : "");
-
-          nodeUpdate.select(".descendant-toggle")
-            .style("display", d => hasDescendants(d) ? "block" : "none");
-
-          nodeUpdate.select(".descendant-toggle-text")
-            .style("display", d => hasDescendants(d) ? "block" : "none");
-
-          nodeUpdate.select(".sibling-toggle")
-            .style("display", d => hasSiblings(d) ? "block" : "none");
-
-          nodeUpdate.select(".sibling-toggle-text")
-            .style("display", d => hasSiblings(d) ? "block" : "none")
-            .text(d => d.siblingsExpanded ? "−" : "+");
+          nodeUpdate.select(".sibling-toggle").style("display", d => hasSiblings(d) ? "block" : "none")
+            .attr("d", d => {
+              const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
+              const bx = primaryCenterX + cardWidth / 2 + 6;
+              return d.siblingsExpanded
+                ? `M ${bx + 4},-4 L ${bx},0 L ${bx + 4},4`
+                : `M ${bx},-4 L ${bx + 4},0 L ${bx},4`;
+            });
 
           nodeUpdate.each(function(d) {
             const group = d3.select(this);
-
             group.selectAll(".sibling-render").remove();
-
             if (d.siblingsExpanded && hasSiblings(d)) {
-              const siblingLayer = group.append("g")
-                .attr("class", "sibling-render");
-
-              drawSiblingGroup(siblingLayer, d);
+              drawSiblingGroup(group.append("g").attr("class", "sibling-render"), d);
             }
           });
 
-          nodes.forEach(d => {
-            d.x0 = d.x;
-            d.y0 = d.y;
-          });
+          nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
         }
       });
   </script>

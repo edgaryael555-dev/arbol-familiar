@@ -29,7 +29,7 @@
             "years": "1974–Viva",
             "gender": "Mujer"
           },
-          "descendants": [
+          "children": [
             {
               "name": "Elena Miranda Ortengren",
               "years": "2016–Viva",
@@ -101,6 +101,71 @@
                 "gender": "Mujer"
               },
               "siblings": [
+                {
+                  "name": "Vicente Rojas Ledezma",
+                  "years": "1902–Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Magdalena Pineda",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Nicolas Rojas Ledezma",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Manuel Rojas Ledezma",
+                  "years": "Fallecido",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Juana Rojas Ledesma",
+                  "years": "Fallecida",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "Rosales",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  }
+                },
+                {
+                  "name": "José Rojas Ledezma",
+                  "years": "Fallecido",
+                  "gender": "Hombre",
+                  "spouse": {
+                    "name": "Benita Peralta Fuentes",
+                    "years": "Fallecida",
+                    "gender": "Mujer"
+                  }
+                },
+                {
+                  "name": "Guadalupe Rojas Ledezma",
+                  "years": "1914–Fallecida",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "José Carlos Valdivia",
+                    "years": "1902–Fallecido",
+                    "gender": "Hombre"
+                  }
+                },
+                {
+                  "name": "Narciso Rojas Ledesma",
+                  "years": "1912–Fallecido",
+                  "gender": "Hombre"
+                },
+                {
+                  "name": "Lorenza Rojas Ledezma",
+                  "years": "1910–Fallecida",
+                  "gender": "Mujer",
+                  "spouse": {
+                    "name": "García",
+                    "years": "Fallecido",
+                    "gender": "Hombre"
+                  }
+                },
                 {
                   "name": "Teodoro Peralta Rojas",
                   "years": "Vivo",
