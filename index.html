@@ -182,23 +182,40 @@
       return wrapper;
     }
 
+
+    function getSiblingDirection(d) {
+      if (d.data.gender === "Hombre") return -1;
+      if (d.data.gender === "Mujer") return 1;
+      return 1;
+    }
+
+    function getSiblingArrowX(d, side) {
+      const groupHalfWidth = hasSpouse(d)
+        ? (cardWidth * 2 + coupleGap) / 2
+        : cardWidth / 2;
+      return side * (groupHalfWidth + 18);
+    }
+
     function drawSiblingGroup(group, d) {
       if (!d.siblingsExpanded || !hasSiblings(d)) return;
 
+      const direction = getSiblingDirection(d);
       const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
-      const startX = primaryCenterX + siblingGap;
+      const anchorX = primaryCenterX + direction * (cardWidth / 2);
+      const startX = anchorX + direction * siblingGap;
 
       d.data.siblings.forEach((sibling, index) => {
         const yOffset = 0;
-        const xOffset = startX + index * siblingColumnGap;
+        const xOffset = startX + direction * index * siblingColumnGap;
+        const targetEdgeX = xOffset - direction * (cardWidth / 2);
 
         group.append("path")
           .attr("class", "sibling-link")
           .attr("d", `
-            M ${primaryCenterX + cardWidth / 2},0
-            C ${primaryCenterX + cardWidth / 2 + 58},0
-              ${xOffset - 95},${yOffset}
-              ${xOffset - cardWidth / 2},${yOffset}
+            M ${anchorX},0
+            C ${anchorX + direction * 58},0
+              ${targetEdgeX - direction * 95},${yOffset}
+              ${targetEdgeX},${yOffset}
           `);
 
         const siblingGroup = drawCoupleOrSingle(group, sibling, xOffset, yOffset, "sibling-card");
@@ -327,13 +344,22 @@
             .style("display", d => hasDescendants(d) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); toggleAncestors(d); update(d); });
 
-          nodeEnter.append("path").attr("class", "toggle-arrow sibling-toggle")
+          nodeEnter.append("path").attr("class", "toggle-arrow sibling-toggle sibling-toggle-right")
             .attr("d", d => {
-              const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
-              const bx = primaryCenterX + cardWidth / 2 + 6;
+              const bx = getSiblingArrowX(d, 1);
               return d.siblingsExpanded
                 ? `M ${bx + 4},-4 L ${bx},0 L ${bx + 4},4`
                 : `M ${bx},-4 L ${bx + 4},0 L ${bx},4`;
+            })
+            .style("display", d => hasSiblings(d) ? "block" : "none")
+            .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
+
+          nodeEnter.append("path").attr("class", "toggle-arrow sibling-toggle sibling-toggle-left")
+            .attr("d", d => {
+              const bx = getSiblingArrowX(d, -1);
+              return d.siblingsExpanded
+                ? `M ${bx - 4},-4 L ${bx},0 L ${bx - 4},4`
+                : `M ${bx},-4 L ${bx - 4},0 L ${bx},4`;
             })
             .style("display", d => hasSiblings(d) ? "block" : "none")
             .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
@@ -347,13 +373,20 @@
           nodeUpdate.select(".descendant-toggle").style("display", d => hasDescendants(d) ? "block" : "none")
             .attr("d", d => d._children ? "M -4,66 L 0,70 L 4,66" : "M -4,70 L 0,66 L 4,70");
 
-          nodeUpdate.select(".sibling-toggle").style("display", d => hasSiblings(d) ? "block" : "none")
+          nodeUpdate.select(".sibling-toggle-right").style("display", d => hasSiblings(d) ? "block" : "none")
             .attr("d", d => {
-              const primaryCenterX = hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
-              const bx = primaryCenterX + cardWidth / 2 + 6;
+              const bx = getSiblingArrowX(d, 1);
               return d.siblingsExpanded
                 ? `M ${bx + 4},-4 L ${bx},0 L ${bx + 4},4`
                 : `M ${bx},-4 L ${bx + 4},0 L ${bx},4`;
+            });
+
+          nodeUpdate.select(".sibling-toggle-left").style("display", d => hasSiblings(d) ? "block" : "none")
+            .attr("d", d => {
+              const bx = getSiblingArrowX(d, -1);
+              return d.siblingsExpanded
+                ? `M ${bx - 4},-4 L ${bx},0 L ${bx - 4},4`
+                : `M ${bx},-4 L ${bx - 4},0 L ${bx},4`;
             });
 
           nodeUpdate.each(function(d) {
