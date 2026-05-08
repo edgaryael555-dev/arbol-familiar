@@ -84,7 +84,7 @@
     }
 
     function hasDescendants(d) {
-      return (d.children && d.children.length > 0) || (d._children && d._children.length > 0);
+      return Boolean(d.parent);
     }
 
     function hasSiblings(d) {
