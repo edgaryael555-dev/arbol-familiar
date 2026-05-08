@@ -1,11 +1,203 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Árbol Familiar</title>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f1ec;
+      color: #2c2c2c;
+    }
+
+    header {
+      padding: 18px 28px;
+      background: #ffffff;
+      border-bottom: 1px solid #ddd;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    #tree-container {
+      width: 100vw;
+      height: calc(100vh - 70px);
+      overflow: hidden;
+    }
+
+    .link {
+      fill: none;
+      stroke: #b8aa96;
+      stroke-width: 2px;
+    }
+
+    .person-card {
+      cursor: pointer;
+    }
+
+    .person-box {
+      fill: #ffffff;
+      stroke: #b8aa96;
+      stroke-width: 1.5px;
+      rx: 14;
+      ry: 14;
+      filter: drop-shadow(0px 3px 6px rgba(0,0,0,0.14));
+    }
+
+    .person-name {
+      font-size: 14px;
+      font-weight: 700;
+      fill: #2d2d2d;
+    }
+
+    .person-info {
+      font-size: 11px;
+      fill: #6b6258;
+    }
+
+    .toggle {
+      fill: #7a6a58;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Mi Árbol Familiar</h1>
-  <p>Primera prueba funcionando 🎉</p>
+  <header>
+    <h1>Árbol Familiar</h1>
+  </header>
+
+  <div id="tree-container">
+    <svg></svg>
+  </div>
+
+  <script>
+    const width = window.innerWidth;
+    const height = window.innerHeight - 70;
+
+    const svg = d3.select("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    const g = svg.append("g");
+
+    svg.call(
+      d3.zoom().on("zoom", (event) => {
+        g.attr("transform", event.transform);
+      })
+    );
+
+    const treeLayout = d3.tree().nodeSize([180, 130]);
+
+    const cardWidth = 150;
+    const cardHeight = 62;
+
+    fetch("family.json")
+      .then(response => response.json())
+      .then(data => {
+        const root = d3.hierarchy(data);
+
+        root.x0 = height / 2;
+        root.y0 = 0;
+
+        root.children?.forEach(collapse);
+        update(root);
+
+        function collapse(d) {
+          if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+          }
+        }
+
+        function update(source) {
+          treeLayout(root);
+
+          const nodes = root.descendants();
+          const links = root.links();
+
+          nodes.forEach(d => d.y = d.depth * 210);
+
+          const link = g.selectAll(".link")
+            .data(links, d => d.target.data.name);
+
+          link.enter()
+            .append("path")
+            .attr("class", "link")
+            .merge(link)
+            .attr("d", d3.linkHorizontal()
+              .x(d => d.y)
+              .y(d => d.x)
+            );
+
+          link.exit().remove();
+
+          const node = g.selectAll(".person-card")
+            .data(nodes, d => d.data.name);
+
+          const nodeEnter = node.enter()
+            .append("g")
+            .attr("class", "person-card")
+            .attr("transform", d => `translate(${d.y},${d.x})`)
+            .on("click", (event, d) => {
+              if (d.children) {
+                d._children = d.children;
+                d.children = null;
+              } else {
+                d.children = d._children;
+                d._children = null;
+              }
+              update(d);
+            });
+
+          nodeEnter.append("rect")
+            .attr("class", "person-box")
+            .attr("x", -cardWidth / 2)
+            .attr("y", -cardHeight / 2)
+            .attr("width", cardWidth)
+            .attr("height", cardHeight);
+
+          nodeEnter.append("text")
+            .attr("class", "person-name")
+            .attr("text-anchor", "middle")
+            .attr("y", -8)
+            .text(d => d.data.name);
+
+          nodeEnter.append("text")
+            .attr("class", "person-info")
+            .attr("text-anchor", "middle")
+            .attr("y", 12)
+            .text(d => d.data.years || "");
+
+          nodeEnter.append("text")
+            .attr("class", "toggle")
+            .attr("text-anchor", "middle")
+            .attr("y", 30)
+            .text(d => d._children ? "+" : d.children ? "−" : "");
+
+          const nodeUpdate = nodeEnter.merge(node);
+
+          nodeUpdate
+            .transition()
+            .duration(300)
+            .attr("transform", d => `translate(${d.y},${d.x})`);
+
+          nodeUpdate.select(".toggle")
+            .text(d => d._children ? "+" : d.children ? "−" : "");
+
+          node.exit().remove();
+
+          g.attr("transform", "translate(120,260)");
+        }
+      });
+  </script>
 </body>
 </html>
