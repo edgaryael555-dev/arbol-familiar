@@ -201,8 +201,16 @@
       const nodeEnter = node.enter().append("g").attr("class", "person-card").attr("transform", d => `translate(${source.x0 || 0},${source.y0 || 0})`);
 
       nodeEnter.each(function(d) { drawCoupleOrSingle(d3.select(this), d.data, 0, 0, true, focusOnPerson); });
-      nodeEnter.append("path").attr("class", "toggle-arrow up").attr("d", d => Boolean(d.children) ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52")
+      const primaryArrowX = d => hasSpouse(d) ? -(cardWidth / 2 + coupleGap / 2) : 0;
+      const spouseArrowX = d => cardWidth / 2 + coupleGap / 2;
+
+      nodeEnter.append("path").attr("class", "toggle-arrow up").attr("transform", d => `translate(${primaryArrowX(d)},0)`)
+        .attr("d", d => Boolean(d.children) ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52")
         .style("display", d => hasAncestors(d) ? "block" : "none")
+        .on("click", (event, d) => { event.stopPropagation(); d.children ? collapseAll(d) : (d.children = d._children, d._children = null); update(d); });
+      nodeEnter.append("path").attr("class", "toggle-arrow up").attr("transform", d => `translate(${spouseArrowX(d)},0)`)
+        .attr("d", d => Boolean(d.children) ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52")
+        .style("display", d => (hasSpouse(d) && hasAncestors(d)) ? "block" : "none")
         .on("click", (event, d) => { event.stopPropagation(); d.children ? collapseAll(d) : (d.children = d._children, d._children = null); update(d); });
       nodeEnter.append("path").attr("class", "toggle-arrow down").attr("d", d => Boolean(d.children) ? "M -4,70 L 0,66 L 4,70" : "M -4,66 L 0,70 L 4,66")
         .style("display", d => hasFamilyChildren(d) ? "block" : "none")
