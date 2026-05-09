@@ -183,6 +183,20 @@
     function collapseAll(d) { if (d.children) { d.children.forEach(collapseAll); d._children = d.children; d.children = null; } }
     function closeAllSiblings(d) { d.siblingsExpanded = false; if (d.children) d.children.forEach(closeAllSiblings); if (d._children) d._children.forEach(closeAllSiblings); }
     function centerView() { svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, 30).scale(0.72)); }
+    function arrowPath(isOpen, direction) {
+      if (direction === "up") return isOpen ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52";
+      return isOpen ? "M -4,70 L 0,66 L 4,70" : "M -4,66 L 0,70 L 4,66";
+    }
+    function cardCenterX(d, spouseCard = false) {
+      if (!hasSpouse(d)) return 0;
+      const baseOffset = cardWidth / 2 + coupleGap / 2;
+      return spouseCard ? baseOffset : -baseOffset;
+    }
+    function toggleChildren(event, d) {
+      event.stopPropagation();
+      d.children ? collapseAll(d) : (d.children = d._children, d._children = null);
+      update(d);
+    }
 
     function update(source) {
       treeLayout(root);
@@ -205,18 +219,31 @@
       const nodeEnter = node.enter().append("g").attr("class", "person-card").attr("transform", d => `translate(${source.x0 || 0},${source.y0 || 0})`);
 
       nodeEnter.each(function(d) { drawCoupleOrSingle(d3.select(this), d.data, 0, 0, true, selectPerson); });
-      nodeEnter.append("path").attr("class", "toggle-arrow up").attr("d", d => Boolean(d.children) ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52")
+      nodeEnter.append("path").attr("class", "toggle-arrow up up-primary").attr("d", d => arrowPath(Boolean(d.children), "up"))
+        .attr("transform", d => `translate(${cardCenterX(d)},0)`)
         .style("display", d => hasAncestors(d) ? "block" : "none")
-        .on("click", (event, d) => { event.stopPropagation(); d.children ? collapseAll(d) : (d.children = d._children, d._children = null); update(d); });
-      nodeEnter.append("path").attr("class", "toggle-arrow down").attr("d", d => Boolean(d.children) ? "M -4,70 L 0,66 L 4,70" : "M -4,66 L 0,70 L 4,66")
+        .on("click", toggleChildren);
+      nodeEnter.append("path").attr("class", "toggle-arrow up up-spouse").attr("d", d => arrowPath(Boolean(d.children), "up"))
+        .attr("transform", d => `translate(${cardCenterX(d, true)},0)`)
+        .style("display", d => (hasAncestors(d) && hasSpouse(d)) ? "block" : "none")
+        .on("click", toggleChildren);
+      nodeEnter.append("path").attr("class", "toggle-arrow down").attr("d", d => arrowPath(Boolean(d.children), "down"))
         .style("display", d => hasFamilyChildren(d) ? "block" : "none")
-        .on("click", (event, d) => { event.stopPropagation(); d.children ? collapseAll(d) : (d.children = d._children, d._children = null); update(d); });
+        .on("click", toggleChildren);
       nodeEnter.append("path").attr("class", "toggle-arrow side").attr("d", d => d.siblingsExpanded ? "M 116,-4 L 112,0 L 116,4" : "M 112,-4 L 116,0 L 112,4")
         .style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none")
         .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
 
       const nodeUpdate = nodeEnter.merge(node);
       nodeUpdate.transition().duration(280).attr("transform", d => `translate(${d.x},${d.y})`);
+      nodeUpdate.select(".up-primary").attr("d", d => arrowPath(Boolean(d.children), "up")).attr("transform", d => `translate(${cardCenterX(d)},0)`)
+        .style("display", d => hasAncestors(d) ? "block" : "none");
+      nodeUpdate.select(".up-spouse").attr("d", d => arrowPath(Boolean(d.children), "up")).attr("transform", d => `translate(${cardCenterX(d, true)},0)`)
+        .style("display", d => (hasAncestors(d) && hasSpouse(d)) ? "block" : "none");
+      nodeUpdate.select(".down").attr("d", d => arrowPath(Boolean(d.children), "down"))
+        .style("display", d => hasFamilyChildren(d) ? "block" : "none");
+      nodeUpdate.select(".side").attr("d", d => d.siblingsExpanded ? "M 116,-4 L 112,0 L 116,4" : "M 112,-4 L 116,0 L 112,4")
+        .style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none");
       nodeUpdate.each(function(d) {
         const group = d3.select(this);
         group.selectAll(".sibling-render").remove();
