@@ -292,13 +292,54 @@
       return links;
     }
 
+    function roundedOrthogonalPath(points, radius = 12) {
+      if (!points.length) return "";
+      if (points.length === 1) return `M ${points[0].x},${points[0].y}`;
+      let path = `M ${points[0].x},${points[0].y}`;
+      for (let i = 1; i < points.length; i += 1) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const next = points[i + 1];
+        if (!next) {
+          path += ` L ${curr.x},${curr.y}`;
+          continue;
+        }
+        const inDx = curr.x - prev.x;
+        const inDy = curr.y - prev.y;
+        const outDx = next.x - curr.x;
+        const outDy = next.y - curr.y;
+        const inLen = Math.hypot(inDx, inDy);
+        const outLen = Math.hypot(outDx, outDy);
+        const r = Math.min(radius, inLen / 2, outLen / 2);
+        if (!r) {
+          path += ` L ${curr.x},${curr.y}`;
+          continue;
+        }
+        const inUx = inDx / inLen;
+        const inUy = inDy / inLen;
+        const outUx = outDx / outLen;
+        const outUy = outDy / outLen;
+        const p1x = curr.x - inUx * r;
+        const p1y = curr.y - inUy * r;
+        const p2x = curr.x + outUx * r;
+        const p2y = curr.y + outUy * r;
+        path += ` L ${p1x},${p1y} Q ${curr.x},${curr.y} ${p2x},${p2y}`;
+      }
+      return path;
+    }
+
     function parentPath(d) {
       const sx = d.source.x;
       const sy = d.source.y + cardHeight / 2;
       const tx = d.target.x;
       const ty = d.target.y - cardHeight / 2;
       const midY = (sy + ty) / 2;
-      return `M ${sx},${sy} C ${sx},${midY} ${tx},${midY} ${tx},${ty}`;
+      return roundedOrthogonalPath([
+        { x: sx, y: sy },
+        { x: sx, y: midY },
+        { x: tx, y: midY },
+        { x: tx, y: ty }
+      ], 14);
     }
 
     function horizontalPath(d) {
@@ -307,8 +348,13 @@
       const tx = d.target.x + (leftToRight ? -cardWidth / 2 : cardWidth / 2);
       const sy = d.source.y;
       const ty = d.target.y;
-      const curve = Math.max(36, Math.abs(tx - sx) / 3);
-      return `M ${sx},${sy} C ${sx + (leftToRight ? curve : -curve)},${sy} ${tx - (leftToRight ? curve : -curve)},${ty} ${tx},${ty}`;
+      const midX = (sx + tx) / 2;
+      return roundedOrthogonalPath([
+        { x: sx, y: sy },
+        { x: midX, y: sy },
+        { x: midX, y: ty },
+        { x: tx, y: ty }
+      ], 14);
     }
 
     function drawLinks(visible) {
