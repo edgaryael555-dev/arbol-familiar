@@ -100,11 +100,6 @@
       card.append("text").attr("class", "person-name").attr("text-anchor", "middle").attr("x", 0).attr("y", -22).text(person.name || "").call(wrapText, 136);
       card.append("text").attr("class", "person-info").attr("text-anchor", "middle").attr("x", 0).attr("y", 20).text(person.years || "");
 
-      const siblingCount = Array.isArray(person.siblings) ? person.siblings.length : 0;
-      const childCount = Array.isArray(person.children) ? person.children.length : 0;
-      const spouseCount = person.spouse ? 1 : 0;
-      card.append("text").attr("class", "meta").attr("text-anchor", "middle").attr("x", 0).attr("y", 42)
-        .text(`H: ${siblingCount} · P: ${spouseCount} · Hij: ${childCount}`);
 
       if (clickable && onClick) {
         card.on("click", (event) => { event.stopPropagation(); onClick(person); });
