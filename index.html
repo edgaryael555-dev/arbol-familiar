@@ -16,6 +16,7 @@
 
     <div class="toolbar">
       <input id="searchPerson" type="search" placeholder="Buscar persona..." aria-label="Buscar persona" />
+      <button id="toggleAllRelations">Expandir todo</button>
       <button id="resetView">Centrar vista</button>
     </div>
   </header>
@@ -355,6 +356,34 @@
       drawRows();
       drawLinks(visible);
       drawNodes(visible);
+      setToggleAllButtonLabel();
+    }
+
+
+    function setToggleAllButtonLabel() {
+      const button = document.getElementById("toggleAllRelations");
+      if (!button) return;
+      const hasExpandable = people.some(person => Object.keys(relationConfig).some(key => cleanIds(person[key]).length));
+      if (!hasExpandable) {
+        button.disabled = true;
+        button.textContent = "Sin relaciones";
+        return;
+      }
+      const allOpen = people.every(person => Object.keys(relationConfig).every(key => !cleanIds(person[key]).length || getOpen(person.id)[key]));
+      button.disabled = false;
+      button.textContent = allOpen ? "Minimizar todo" : "Expandir todo";
+    }
+
+    function toggleAllRelations() {
+      const allOpen = people.every(person => Object.keys(relationConfig).every(key => !cleanIds(person[key]).length || getOpen(person.id)[key]));
+      people.forEach(person => {
+        const state = getOpen(person.id);
+        Object.keys(relationConfig).forEach(key => {
+          if (cleanIds(person[key]).length) state[key] = !allOpen;
+        });
+      });
+      update();
+      if (selectedId && byId.has(selectedId)) renderPanel(byId.get(selectedId));
     }
 
     function selectPerson(id, center = false) {
@@ -401,6 +430,7 @@
           centerOn(byId.get(rootId));
         }
 
+        document.getElementById("toggleAllRelations").addEventListener("click", toggleAllRelations);
         document.getElementById("resetView").addEventListener("click", centerView);
         document.getElementById("searchPerson").addEventListener("input", event => {
           currentSearch = event.target.value.trim();
