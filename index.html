@@ -136,6 +136,10 @@
       `;
     }
 
+    function selectPerson(person) {
+      renderPanel(person);
+    }
+
     function focusOnPerson(person, pushHistory = true) {
       if (pushHistory && root?.data) history.push(root.data);
       root = d3.hierarchy(normalizeTreeData(person));
@@ -157,7 +161,7 @@
         const xOffset = startX + direction * index * siblingColumnGap;
         const targetEdgeX = xOffset - direction * (cardWidth / 2);
         group.append("path").attr("class", "sibling-link").attr("d", `M ${anchorX},0 C ${anchorX + direction * 58},0 ${targetEdgeX - direction * 95},0 ${targetEdgeX},0`);
-        drawCoupleOrSingle(group, sibling, xOffset, 0, true, focusOnPerson);
+        drawCoupleOrSingle(group, sibling, xOffset, 0, true, selectPerson);
       });
 
       if (hasSpouseSiblings(d)) {
@@ -169,7 +173,7 @@
           const xOffset = spouseStartX + spouseDirection * index * siblingColumnGap;
           const targetEdgeX = xOffset - spouseDirection * (cardWidth / 2);
           group.append("path").attr("class", "sibling-link spouse-sibling-link").attr("d", `M ${spouseAnchorX},0 C ${spouseAnchorX + spouseDirection * 58},0 ${targetEdgeX - spouseDirection * 95},0 ${targetEdgeX},0`);
-          drawCoupleOrSingle(group, sibling, xOffset, 0, true, focusOnPerson);
+          drawCoupleOrSingle(group, sibling, xOffset, 0, true, selectPerson);
         });
       }
     }
@@ -200,7 +204,7 @@
       node.exit().remove();
       const nodeEnter = node.enter().append("g").attr("class", "person-card").attr("transform", d => `translate(${source.x0 || 0},${source.y0 || 0})`);
 
-      nodeEnter.each(function(d) { drawCoupleOrSingle(d3.select(this), d.data, 0, 0, true, focusOnPerson); });
+      nodeEnter.each(function(d) { drawCoupleOrSingle(d3.select(this), d.data, 0, 0, true, selectPerson); });
       nodeEnter.append("path").attr("class", "toggle-arrow up").attr("d", d => Boolean(d.children) ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52")
         .style("display", d => hasAncestors(d) ? "block" : "none")
         .on("click", (event, d) => { event.stopPropagation(); d.children ? collapseAll(d) : (d.children = d._children, d._children = null); update(d); });
