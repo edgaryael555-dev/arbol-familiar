@@ -198,6 +198,26 @@
       const maxRow = Math.max(...generations.map(gen => byGeneration.get(gen).length), 1);
       const rowWidth = maxRow * cardWidth + Math.max(0, maxRow - 1) * xGap;
 
+      const minCenterGap = cardWidth + xGap;
+
+      function distributeRowCenters(row, preserveCenter = true) {
+        if (!row.length) return;
+        row.sort((a, b) => a.x - b.x);
+        for (let i = 1; i < row.length; i += 1) {
+          row[i].x = Math.max(row[i].x, row[i - 1].x + minCenterGap);
+        }
+        for (let i = row.length - 2; i >= 0; i -= 1) {
+          row[i].x = Math.min(row[i].x, row[i + 1].x - minCenterGap);
+        }
+        if (!preserveCenter) return;
+        const first = row[0].x;
+        const last = row[row.length - 1].x;
+        const currentCenter = (first + last) / 2;
+        const targetCenter = leftPad + rowWidth / 2;
+        const shift = targetCenter - currentCenter;
+        row.forEach(person => { person.x += shift; });
+      }
+
       generations.forEach((gen, rowIndex) => {
         const row = byGeneration.get(gen);
         const thisRowWidth = row.length * cardWidth + Math.max(0, row.length - 1) * xGap;
@@ -207,6 +227,19 @@
           person.y = topPad + rowIndex * yGap;
         });
       });
+
+      for (let pass = 0; pass < 3; pass += 1) {
+        generations.forEach(gen => {
+          const row = byGeneration.get(gen);
+          row.forEach(parent => {
+            const visibleChildren = cleanIds(parent.children).map(id => byId.get(id)).filter(child => ids.has(child.id));
+            if (!visibleChildren.length) return;
+            const childrenCenter = visibleChildren.reduce((sum, child) => sum + child.x, 0) / visibleChildren.length;
+            parent.x = childrenCenter;
+          });
+          distributeRowCenters(row, true);
+        });
+      }
 
       dimensions = {
         width: leftPad * 2 + rowWidth,
