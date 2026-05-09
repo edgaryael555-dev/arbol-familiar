@@ -183,16 +183,29 @@
     function collapseAll(d) { if (d.children) { d.children.forEach(collapseAll); d._children = d.children; d.children = null; } }
     function closeAllSiblings(d) { d.siblingsExpanded = false; if (d.children) d.children.forEach(closeAllSiblings); if (d._children) d._children.forEach(closeAllSiblings); }
     function centerView() { svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, 30).scale(0.72)); }
+    const toggleArrowSize = 4;
+    const toggleArrowMargin = 12;
     function arrowPath(isOpen, direction) {
-      if (direction === "up") return isOpen ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52";
-      return isOpen ? "M -4,70 L 0,66 L 4,70" : "M -4,66 L 0,70 L 4,66";
+      const topY = -(cardHeight / 2 + toggleArrowMargin);
+      const bottomY = cardHeight / 2 + toggleArrowMargin;
+      if (direction === "up") {
+        return isOpen
+          ? `M ${-toggleArrowSize},${topY} L 0,${topY + toggleArrowSize} L ${toggleArrowSize},${topY}`
+          : `M ${-toggleArrowSize},${topY + toggleArrowSize} L 0,${topY} L ${toggleArrowSize},${topY + toggleArrowSize}`;
+      }
+      return isOpen
+        ? `M ${-toggleArrowSize},${bottomY} L 0,${bottomY - toggleArrowSize} L ${toggleArrowSize},${bottomY}`
+        : `M ${-toggleArrowSize},${bottomY - toggleArrowSize} L 0,${bottomY} L ${toggleArrowSize},${bottomY - toggleArrowSize}`;
     }
     function lateralDirection(d) {
       return d.data.gender === "Hombre" ? -1 : 1;
     }
     function sideArrowPath(isOpen, direction) {
-      if (direction < 0) return isOpen ? "M -112,-4 L -116,0 L -112,4" : "M -116,-4 L -112,0 L -116,4";
-      return isOpen ? "M 116,-4 L 112,0 L 116,4" : "M 112,-4 L 116,0 L 112,4";
+      const sideX = cardWidth / 2 + toggleArrowMargin;
+      const edgeX = direction < 0 ? -sideX : sideX;
+      const pointX = direction < 0 ? edgeX - toggleArrowSize : edgeX + toggleArrowSize;
+      if (isOpen) return `M ${edgeX},${-toggleArrowSize} L ${pointX},0 L ${edgeX},${toggleArrowSize}`;
+      return `M ${pointX},${-toggleArrowSize} L ${edgeX},0 L ${pointX},${toggleArrowSize}`;
     }
     function cardCenterX(d, spouseCard = false) {
       if (!hasSpouse(d)) return 0;
