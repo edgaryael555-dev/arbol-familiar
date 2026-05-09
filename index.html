@@ -176,39 +176,94 @@
       return ids;
     }
 
+    function birthYear(person) {
+      const match = String(person.years || "").match(/\d{4}/);
+      return match ? Number(match[0]) : Number.POSITIVE_INFINITY;
+    }
+
+    function comparePeople(a, b) {
+      const aYear = birthYear(a);
+      const bYear = birthYear(b);
+      const aName = a.name || "";
+      const bName = b.name || "";
+      const aId = a.id || "";
+      const bId = b.id || "";
+      if (aYear !== bYear) return aYear - bYear;
+      return aName.localeCompare(bName, "es", { sensitivity: "base" }) || aId.localeCompare(bId, "es");
+    }
+
+    function parentGroupKey(person) {
+      const parents = cleanIds(person.parents).sort((a, b) => a.localeCompare(b, "es"));
+      return parents.length ? parents.join("|") : `sin-padres:${person.id}`;
+    }
+
+    function familyCenter(row, parentIds) {
+      const childPositions = row
+        .filter(person => cleanIds(person.parents).some(parentId => parentIds.includes(parentId)))
+        .map(person => person.x)
+        .filter(Number.isFinite);
+      if (!childPositions.length) return null;
+      return childPositions.reduce((sum, x) => sum + x, 0) / childPositions.length;
+    }
+
+    function orderedGenerations(visible) {
+      return [...new Set(visible.map(p => p.generation))].sort((a, b) => b - a);
+    }
+
     function layoutVisiblePeople() {
       const ids = visibleIdSet();
       const visible = people.filter(p => ids.has(p.id));
-      const generations = [...new Set(visible.map(p => p.generation))].sort((a, b) => b - a);
+      const generations = orderedGenerations(visible);
       const byGeneration = new Map(generations.map(gen => [gen, []]));
 
       visible.forEach(p => byGeneration.get(p.generation).push(p));
+
       generations.forEach(gen => {
         const row = byGeneration.get(gen);
-        row.sort((a, b) => {
-          if (a.id === selectedId) return -1;
-          if (b.id === selectedId) return 1;
-          const aParents = cleanIds(a.parents).join(" ");
-          const bParents = cleanIds(b.parents).join(" ");
-          return aParents.localeCompare(bParents, "es") || a.name.localeCompare(b.name, "es");
-        });
+        const grouped = d3.group(row, parentGroupKey);
+        const stableRow = [];
+        [...grouped.entries()]
+          .sort(([, groupA], [, groupB]) => comparePeople(groupA[0], groupB[0]))
+          .forEach(([, group]) => stableRow.push(...group.sort(comparePeople)));
+        byGeneration.set(gen, stableRow);
       });
 
       const maxRow = Math.max(...generations.map(gen => byGeneration.get(gen).length), 1);
       const rowWidth = maxRow * cardWidth + Math.max(0, maxRow - 1) * xGap;
 
-      generations.forEach((gen, rowIndex) => {
+      [...generations].reverse().forEach(gen => {
         const row = byGeneration.get(gen);
+        const rowIndex = generations.indexOf(gen);
         const thisRowWidth = row.length * cardWidth + Math.max(0, row.length - 1) * xGap;
         const startX = leftPad + (rowWidth - thisRowWidth) / 2 + cardWidth / 2;
+
         row.forEach((person, index) => {
           person.x = startX + index * (cardWidth + xGap);
           person.y = topPad + rowIndex * yGap;
         });
+
+        const childRow = byGeneration.get(generations[rowIndex + 1]) || [];
+        row.forEach(person => {
+          const centeredX = familyCenter(childRow, [person.id, ...cleanIds(person.spouses)]);
+          if (centeredX !== null) person.x = centeredX;
+        });
+
+        row.sort((a, b) => a.x - b.x || comparePeople(a, b));
+        for (let index = 1; index < row.length; index += 1) {
+          const minX = row[index - 1].x + cardWidth + xGap;
+          if (row[index].x < minX) row[index].x = minX;
+        }
       });
 
+      const minX = Math.min(...visible.map(person => person.x - cardWidth / 2), leftPad);
+      if (minX < leftPad) {
+        const shift = leftPad - minX;
+        visible.forEach(person => { person.x += shift; });
+      }
+
+      const maxX = Math.max(...visible.map(person => person.x + cardWidth / 2), leftPad + rowWidth);
       dimensions = {
-        width: leftPad * 2 + rowWidth,
+        width: maxX + leftPad,
         height: topPad + generations.length * yGap + 100,
         visible,
         generations,
@@ -371,7 +426,7 @@
       const width = svgNode.clientWidth || 1000;
       const height = svgNode.clientHeight || 700;
       const scale = 0.9;
-      svg.transition().duration(420).call(
+      svg.interrupt().transition().duration(420).call(
         zoom.transform,
         d3.zoomIdentity.translate(width / 2 - person.x * scale, height / 2 - person.y * scale).scale(scale)
       );
@@ -380,7 +435,7 @@
     function centerView() {
       const svgNode = svg.node();
       const scale = Math.min(0.95, Math.max(0.28, (svgNode.clientWidth || 1000) / Math.max(dimensions.width, 1)));
-      svg.transition().duration(420).call(zoom.transform, d3.zoomIdentity.translate(40, 42).scale(scale));
+      svg.interrupt().transition().duration(420).call(zoom.transform, d3.zoomIdentity.translate(40, 42).scale(scale));
     }
 
     fetch("family.json")
