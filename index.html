@@ -31,8 +31,13 @@
   </main>
 
   <script>
-    const width = window.innerWidth - 320;
-    const height = window.innerHeight - 64;
+    const treeContainer = document.getElementById("tree-container");
+    const getViewportSize = () => ({
+      width: treeContainer.clientWidth,
+      height: treeContainer.clientHeight
+    });
+
+    let { width, height } = getViewportSize();
 
     const svg = d3.select("svg").attr("width", width).attr("height", height);
     const g = svg.append("g");
@@ -188,6 +193,13 @@
     function closeAllSiblings(d) { d.siblingsExpanded = false; if (d.children) d.children.forEach(closeAllSiblings); if (d._children) d._children.forEach(closeAllSiblings); }
     function centerView() { svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, 30).scale(0.72)); }
 
+    function resizeViewport() {
+      ({ width, height } = getViewportSize());
+      svg.attr("width", width).attr("height", height);
+      if (root) update(root);
+      centerView();
+    }
+
     function update(source) {
       treeLayout(root);
       const nodes = root.descendants();
@@ -245,6 +257,8 @@
           if (prev) focusOnPerson(prev, false);
           document.getElementById("goBack").disabled = history.length === 0;
         });
+
+        window.addEventListener("resize", resizeViewport);
 
         document.getElementById("searchPerson").addEventListener("input", (event) => {
           const query = event.target.value.trim().toLowerCase();
