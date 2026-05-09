@@ -183,9 +183,22 @@
     function collapseAll(d) { if (d.children) { d.children.forEach(collapseAll); d._children = d.children; d.children = null; } }
     function closeAllSiblings(d) { d.siblingsExpanded = false; if (d.children) d.children.forEach(closeAllSiblings); if (d._children) d._children.forEach(closeAllSiblings); }
     function centerView() { svg.call(zoom.transform, d3.zoomIdentity.translate(width / 2, 30).scale(0.72)); }
+    const arrowOffset = 14;
+    const sideArrowOffset = 16;
+
     function arrowPath(isOpen, direction) {
-      if (direction === "up") return isOpen ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52";
-      return isOpen ? "M -4,70 L 0,66 L 4,70" : "M -4,66 L 0,70 L 4,66";
+      const topY = -(cardHeight / 2 + arrowOffset);
+      const bottomY = cardHeight / 2 + arrowOffset;
+      if (direction === "up") return isOpen ? `M -4,${topY} L 0,${topY + 4} L 4,${topY}` : `M -4,${topY + 4} L 0,${topY} L 4,${topY + 4}`;
+      return isOpen ? `M -4,${bottomY} L 0,${bottomY - 4} L 4,${bottomY}` : `M -4,${bottomY - 4} L 0,${bottomY} L 4,${bottomY - 4}`;
+    }
+
+    function sideArrowPath(d) {
+      const direction = d.data.gender === "Hombre" ? -1 : 1;
+      const sideX = direction * (cardWidth / 2 + sideArrowOffset);
+      return d.siblingsExpanded
+        ? `M ${sideX},-4 L ${sideX - direction * 4},0 L ${sideX},4`
+        : `M ${sideX - direction * 4},-4 L ${sideX},0 L ${sideX - direction * 4},4`;
     }
     function cardCenterX(d, spouseCard = false) {
       if (!hasSpouse(d)) return 0;
@@ -230,7 +243,7 @@
       nodeEnter.append("path").attr("class", "toggle-arrow down").attr("d", d => arrowPath(Boolean(d.children), "down"))
         .style("display", d => hasFamilyChildren(d) ? "block" : "none")
         .on("click", toggleChildren);
-      nodeEnter.append("path").attr("class", "toggle-arrow side").attr("d", d => d.siblingsExpanded ? "M 116,-4 L 112,0 L 116,4" : "M 112,-4 L 116,0 L 112,4")
+      nodeEnter.append("path").attr("class", "toggle-arrow side").attr("d", sideArrowPath)
         .style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none")
         .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
 
@@ -242,7 +255,7 @@
         .style("display", d => (hasAncestors(d) && hasSpouse(d)) ? "block" : "none");
       nodeUpdate.select(".down").attr("d", d => arrowPath(Boolean(d.children), "down"))
         .style("display", d => hasFamilyChildren(d) ? "block" : "none");
-      nodeUpdate.select(".side").attr("d", d => d.siblingsExpanded ? "M 116,-4 L 112,0 L 116,4" : "M 112,-4 L 116,0 L 112,4")
+      nodeUpdate.select(".side").attr("d", sideArrowPath)
         .style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none");
       nodeUpdate.each(function(d) {
         const group = d3.select(this);
