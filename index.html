@@ -94,11 +94,8 @@
       });
     }
 
-    function drawPersonCard(group, person, xOffset, yOffset = 0, relationLabel = "", clickable = false, onClick = null) {
+    function drawPersonCard(group, person, xOffset, yOffset = 0, clickable = false, onClick = null) {
       const card = group.append("g").attr("transform", `translate(${xOffset},${yOffset})`).classed("clickable", clickable);
-      if (relationLabel) {
-        card.append("text").attr("class", "relation-label").attr("text-anchor", "middle").attr("x", 0).attr("y", -cardHeight / 2 - 10).text(relationLabel);
-      }
       card.append("rect").attr("class", personClass(person)).attr("x", -cardWidth / 2).attr("y", -cardHeight / 2).attr("width", cardWidth).attr("height", cardHeight);
       card.append("text").attr("class", "person-name").attr("text-anchor", "middle").attr("x", 0).attr("y", -22).text(person.name || "").call(wrapText, 136);
       card.append("text").attr("class", "person-info").attr("text-anchor", "middle").attr("x", 0).attr("y", 20).text(person.years || "");
@@ -120,11 +117,11 @@
       if (personData.spouse && typeof personData.spouse === "object") {
         const leftX = -(cardWidth / 2 + coupleGap / 2);
         const rightX = cardWidth / 2 + coupleGap / 2;
-        drawPersonCard(wrapper, personData, leftX, 0, "Persona", clickable, onClick);
-        drawPersonCard(wrapper, personData.spouse, rightX, 0, "Pareja", clickable, null);
+        drawPersonCard(wrapper, personData, leftX, 0, clickable, onClick);
+        drawPersonCard(wrapper, personData.spouse, rightX, 0, clickable, null);
         wrapper.append("text").attr("class", "heart").attr("text-anchor", "middle").attr("x", 0).attr("y", 8).text("♥");
       } else {
-        drawPersonCard(wrapper, personData, 0, 0, "Persona", clickable, onClick);
+        drawPersonCard(wrapper, personData, 0, 0, clickable, onClick);
       }
       return wrapper;
     }
