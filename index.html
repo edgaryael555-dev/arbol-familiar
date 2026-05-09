@@ -187,6 +187,13 @@
       if (direction === "up") return isOpen ? "M -4,-56 L 0,-52 L 4,-56" : "M -4,-52 L 0,-56 L 4,-52";
       return isOpen ? "M -4,70 L 0,66 L 4,70" : "M -4,66 L 0,70 L 4,66";
     }
+    function lateralDirection(d) {
+      return d.data.gender === "Hombre" ? -1 : 1;
+    }
+    function sideArrowPath(isOpen, direction) {
+      if (direction < 0) return isOpen ? "M -112,-4 L -116,0 L -112,4" : "M -116,-4 L -112,0 L -116,4";
+      return isOpen ? "M 116,-4 L 112,0 L 116,4" : "M 112,-4 L 116,0 L 112,4";
+    }
     function cardCenterX(d, spouseCard = false) {
       if (!hasSpouse(d)) return 0;
       const baseOffset = cardWidth / 2 + coupleGap / 2;
@@ -230,7 +237,7 @@
       nodeEnter.append("path").attr("class", "toggle-arrow down").attr("d", d => arrowPath(Boolean(d.children), "down"))
         .style("display", d => hasFamilyChildren(d) ? "block" : "none")
         .on("click", toggleChildren);
-      nodeEnter.append("path").attr("class", "toggle-arrow side").attr("d", d => d.siblingsExpanded ? "M 116,-4 L 112,0 L 116,4" : "M 112,-4 L 116,0 L 112,4")
+      nodeEnter.append("path").attr("class", "toggle-arrow side").attr("d", d => sideArrowPath(d.siblingsExpanded, lateralDirection(d)))
         .style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none")
         .on("click", (event, d) => { event.stopPropagation(); d.siblingsExpanded = !d.siblingsExpanded; update(d); });
 
@@ -242,7 +249,7 @@
         .style("display", d => (hasAncestors(d) && hasSpouse(d)) ? "block" : "none");
       nodeUpdate.select(".down").attr("d", d => arrowPath(Boolean(d.children), "down"))
         .style("display", d => hasFamilyChildren(d) ? "block" : "none");
-      nodeUpdate.select(".side").attr("d", d => d.siblingsExpanded ? "M 116,-4 L 112,0 L 116,4" : "M 112,-4 L 116,0 L 112,4")
+      nodeUpdate.select(".side").attr("d", d => sideArrowPath(d.siblingsExpanded, lateralDirection(d)))
         .style("display", d => (hasSiblings(d) || hasSpouseSiblings(d)) ? "block" : "none");
       nodeUpdate.each(function(d) {
         const group = d3.select(this);
