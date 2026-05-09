@@ -130,7 +130,7 @@
         const words = (text.text() || "").split(/\s+/).reverse();
         let line = [];
         let lineNumber = 0;
-        const lineHeight = 14;
+        const lineHeight = 13;
         const y = Number(text.attr("y"));
         const x = Number(text.attr("x") || 0);
         text.text(null);
@@ -307,7 +307,7 @@
         .attr("class", "person-name")
         .attr("text-anchor", "middle")
         .attr("x", 0)
-        .attr("y", -18)
+        .attr("y", -23)
         .text(d => d.name)
         .call(wrapText, cardWidth - 34);
 
@@ -315,7 +315,7 @@
         .attr("class", "person-info")
         .attr("text-anchor", "middle")
         .attr("x", 0)
-        .attr("y", 28);
+        .attr("y", 20);
 
       Object.entries(relationConfig).forEach(([key, cfg]) => {
         const arrow = enter.append("g")
@@ -330,7 +330,7 @@
             update();
             centerOn(d);
           });
-        arrow.append("circle").attr("r", 12);
+        arrow.append("circle").attr("r", 10);
         arrow.append("text").attr("text-anchor", "middle").attr("dominant-baseline", "central").text(cfg.icon);
         arrow.append("title").text(cfg.label);
       });
