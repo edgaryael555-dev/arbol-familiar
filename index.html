@@ -149,6 +149,65 @@
       });
     }
 
+
+    function parseBirthRank(person) {
+      const text = String(person.birthDate || person.birthdate || person.years || "").trim();
+      if (!text) return Number.POSITIVE_INFINITY;
+      const match = text.match(/(\d{4})/);
+      return match ? Number(match[1]) : Number.POSITIVE_INFINITY;
+    }
+
+    function compareByBirthOrName(a, b) {
+      const aBirth = parseBirthRank(a);
+      const bBirth = parseBirthRank(b);
+      if (aBirth !== bBirth) return aBirth - bBirth;
+      return a.name.localeCompare(b.name, "es", { sensitivity: "base" });
+    }
+
+    function genderOrder(person) {
+      if (person.gender === "Hombre") return 0;
+      if (person.gender === "Mujer") return 1;
+      return 2;
+    }
+
+    function comparePeople(a, b) {
+      if (a.id === selectedId) return -1;
+      if (b.id === selectedId) return 1;
+      const aParents = cleanIds(a.parents).join(" ");
+      const bParents = cleanIds(b.parents).join(" ");
+      const parentCmp = aParents.localeCompare(bParents, "es");
+      if (parentCmp) return parentCmp;
+      const siblingCmp = compareByBirthOrName(a, b);
+      if (siblingCmp) return siblingCmp;
+      return a.name.localeCompare(b.name, "es", { sensitivity: "base" });
+    }
+
+    function orderRowWithCouples(row) {
+      const ordered = [...row].sort(comparePeople);
+      const used = new Set();
+      const result = [];
+
+      ordered.forEach(person => {
+        if (used.has(person.id)) return;
+        const spouse = cleanIds(person.spouses)
+          .map(id => byId.get(id))
+          .find(candidate => candidate && row.includes(candidate) && !used.has(candidate.id));
+
+        if (spouse) {
+          const pair = [person, spouse].sort((a, b) => genderOrder(a) - genderOrder(b) || comparePeople(a, b));
+          pair.forEach(member => {
+            used.add(member.id);
+            result.push(member);
+          });
+          return;
+        }
+
+        used.add(person.id);
+        result.push(person);
+      });
+
+      return result;
+    }
     function visibleIdSet() {
       const ids = new Set();
       if (rootId) ids.add(rootId);
@@ -185,13 +244,7 @@
       visible.forEach(p => byGeneration.get(p.generation).push(p));
       generations.forEach(gen => {
         const row = byGeneration.get(gen);
-        row.sort((a, b) => {
-          if (a.id === selectedId) return -1;
-          if (b.id === selectedId) return 1;
-          const aParents = cleanIds(a.parents).join(" ");
-          const bParents = cleanIds(b.parents).join(" ");
-          return aParents.localeCompare(bParents, "es") || a.name.localeCompare(b.name, "es");
-        });
+        byGeneration.set(gen, orderRowWithCouples(row));
       });
 
       const maxRow = Math.max(...generations.map(gen => byGeneration.get(gen).length), 1);
