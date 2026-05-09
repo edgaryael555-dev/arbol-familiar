@@ -128,21 +128,31 @@ svg:active { cursor: grabbing; }
 }
 .relation-list button:hover { border-color: var(--primary); color: #075c73; background: #eefafd; }
 
-.link {
+.relation-link {
   fill: none;
-  stroke: #a3adb1;
-  stroke-width: 1.5px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.7;
+  opacity: 0.92;
 }
-.link.related { stroke: #0b86a8; stroke-width: 2.5px; opacity: 1; }
+.parent-link {
+  stroke: #8aa2af;
+  stroke-width: 1.55px;
+}
+.child-link {
+  stroke: #8aa2af;
+  stroke-width: 1.55px;
+}
 .sibling-link {
-  fill: none;
-  stroke: #8b5cf6;
-  stroke-width: 1.7px;
-  stroke-dasharray: 5 6;
+  stroke: #9f7aea;
+  stroke-width: 1.35px;
+  stroke-dasharray: 4 6;
   opacity: 0.8;
+}
+.spouse-link {
+  stroke: #f472b6;
+  stroke-width: 1.3px;
+  stroke-dasharray: 2 5;
+  opacity: 0.82;
 }
 
 .generation-label rect { fill: rgba(255, 255, 255, 0.9); stroke: #d8e0e4; filter: drop-shadow(0 3px 8px rgba(15,23,42,0.10)); }
@@ -171,6 +181,26 @@ svg:active { cursor: grabbing; }
 .person-name { font-size: 13px; font-weight: 800; fill: #111827; pointer-events: none; }
 .person-info { font-size: 11px; fill: #4b5563; pointer-events: none; }
 .mini-meta { font-size: 10px; fill: #64748b; font-weight: 700; pointer-events: none; }
+
+.relation-toggle circle {
+  fill: #ffffff;
+  stroke: #c4d0d7;
+  stroke-width: 1.3px;
+  filter: drop-shadow(0 2px 5px rgba(15, 23, 42, 0.18));
+}
+.relation-toggle text {
+  fill: #5b6974;
+  font-size: 11px;
+  font-weight: 900;
+  pointer-events: none;
+}
+.relation-toggle.open circle {
+  fill: #e9f7fd;
+  stroke: #0b86a8;
+}
+.relation-toggle.open text {
+  fill: #075c73;
+}
 
 .legend {
   position: absolute;
